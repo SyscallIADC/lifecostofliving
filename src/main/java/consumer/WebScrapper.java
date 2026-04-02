@@ -25,7 +25,7 @@ public class WebScrapper implements AutoCloseable{
              Page page = context.newPage()) {
 
             navigateToCountryUrl(page, countryName);
-            simulateHumanReadingTime();
+            simulateHumanReadingTime(page);
 
             return buildLivingCostModel(page, countryName);
         }
@@ -45,16 +45,13 @@ public class WebScrapper implements AutoCloseable{
         );
     }
 
-    private void simulateHumanReadingTime() {
+    private void simulateHumanReadingTime(Page page) {
         int randomDelayInMilliseconds = 3000 + randomGenerator.nextInt(4000);
-        try {
-            Thread.sleep(randomDelayInMilliseconds);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+        page.waitForTimeout(randomDelayInMilliseconds);
     }
 
     private void navigateToCountryUrl(Page page, String countryName) {
+        String countryUrl = countryName.replace(" ", "+");
         String targetUrl = URL + countryName;
         page.navigate(targetUrl);
         page.waitForLoadState();
@@ -62,35 +59,35 @@ public class WebScrapper implements AutoCloseable{
 
     private LivingCost buildLivingCostModel(Page page, String countryName) {
         String currency = extractCurrency(page);
-        double fruits = (Double) extractFruits(page);
-        double vegetables = (Double) extractVegetables(page);
-        double utilities = (Double) extractUtilities(page);
+        double fruits = extractFruits(page);
+        double vegetables = extractVegetables(page);
+        double utilities = extractUtilities(page);
 
         return new LivingCost(
                 countryName,
                 currency,
-                (Double) extractPriceByName(page, "Cappuccino (Regular Size)"),
-                (Double) extractPriceByName(page, "Milk (Regular, 1 Liter)"),
-                (Double) extractPriceByName(page, "Fresh White Bread (500 g Loaf)"),
-                (Double) extractPriceByName(page, "White Rice (1 kg)"),
-                (Double) extractPriceByName(page, "Eggs (12, Large Size)"),
-                (Double) extractPriceByName(page, "Local Cheese (1 kg)"),
-                (Double) extractPriceByName(page, "Chicken Fillets (1 kg)"),
-                (Double) extractPriceByName(page, "Beef Round or Equivalent Back Leg Red Meat (1 kg)"),
+                extractPriceByName(page, "Cappuccino (Regular Size)"),
+                extractPriceByName(page, "Milk (Regular, 1 Liter)"),
+                extractPriceByName(page, "Fresh White Bread (500 g Loaf)"),
+                extractPriceByName(page, "White Rice (1 kg)"),
+                extractPriceByName(page, "Eggs (12, Large Size)"),
+                extractPriceByName(page, "Local Cheese (1 kg)"),
+                extractPriceByName(page, "Chicken Fillets (1 kg)"),
+                extractPriceByName(page, "Beef Round or Equivalent Back Leg Red Meat (1 kg)"),
                 fruits,
                 vegetables,
-                (Double) extractPriceByName(page, "Bottled Water (1.5 Liter)"),
-                (Double) extractPriceByName(page, "Monthly Public Transport Pass (Regular Price)"),
-                (Double) extractPriceByName(page, "Gasoline (1 Liter)"),
-                (Double) extractPriceByName(page, "Volkswagen Golf 1.5 (or Equivalent New Compact Car)"),
+                extractPriceByName(page, "Bottled Water (1.5 Liter)"),
+                extractPriceByName(page, "Monthly Public Transport Pass (Regular Price)"),
+                extractPriceByName(page, "Gasoline (1 Liter)"),
+                extractPriceByName(page, "Volkswagen Golf 1.5 (or Equivalent New Compact Car)"),
                 utilities,
-                (Double) extractPriceByName(page, "Monthly Fitness Club Membership"),
-                (Double) extractPriceByName(page, "International Primary School, Annual Tuition per Child"),
-                (Double) extractPriceByName(page, "1 Bedroom Apartment in City Centre"),
-                (Double) extractPriceByName(page, "3 Bedroom Apartment in City Centre"),
-                (Double) extractPriceByName(page, "Price per Square Meter to Buy Apartment in City Centre"),
-                (Double) extractPriceByName(page, "Average Monthly Net Salary (After Tax)"),
-                (Double) extractPriceByName(page, "Annual Mortgage Interest Rate (20-Year Fixed, in %)"),
+                extractPriceByName(page, "Monthly Fitness Club Membership"),
+                extractPriceByName(page, "International Primary School, Annual Tuition per Child"),
+                extractPriceByName(page, "1 Bedroom Apartment in City Centre"),
+                extractPriceByName(page, "3 Bedroom Apartment in City Centre"),
+                extractPriceByName(page, "Price per Square Meter to Buy Apartment in City Centre"),
+                extractPriceByName(page, "Average Monthly Net Salary (After Tax)"),
+                extractPriceByName(page, "Annual Mortgage Interest Rate (20-Year Fixed, in %)"),
                 LocalDate.now(),
                 LocalTime.now()
         );
@@ -100,7 +97,7 @@ public class WebScrapper implements AutoCloseable{
         Locator currencyForm = page.locator("#displayCurrency");
         return currencyForm.isVisible() ? currencyForm.inputValue() : "NOT FOUND";
     }
-    private Object extractPriceByName(Page page, String name) {
+    private double extractPriceByName(Page page, String name) {
         Locator targetRow = page.locator("tr").filter(
                 new Locator.FilterOptions().setHasText(name)
         ).first();
@@ -113,7 +110,7 @@ public class WebScrapper implements AutoCloseable{
         return 0.0;
     }
 
-    private Object parsePrice(String rawPrice) {
+    private double parsePrice(String rawPrice) {
         String numericText = rawPrice.replaceAll("[^\\d.]", "").replace(",", "");
         if (numericText.isEmpty()) {
             return 0.0;
@@ -135,7 +132,7 @@ public class WebScrapper implements AutoCloseable{
                 "Tomatoes (1 kg)"
         );
         for (String fruit : fruits) {
-            Double fruitPrice = (Double) extractPriceByName(page, fruit);
+            Double fruitPrice = extractPriceByName(page, fruit);
             totalPrice += fruitPrice;
         }
         return totalPrice;
@@ -149,7 +146,7 @@ public class WebScrapper implements AutoCloseable{
                 "Lettuce (1 Head)"
         );
         for (String vegetable : vegetables) {
-            Double vegetablePrice = (Double) extractPriceByName(page, vegetable);
+            Double vegetablePrice = extractPriceByName(page, vegetable);
             totalPrice += vegetablePrice;
         }
         return totalPrice;
@@ -158,12 +155,12 @@ public class WebScrapper implements AutoCloseable{
     private double extractUtilities(Page page) {
         Double totalPrice = 0.0;
         List<String> utilities = List.of(
-                "Basic Utilities for 85 m2 Apartment (Electricity, Heating, Cooling, Water, Garbage)\t",
+                "Basic Utilities for 85 m2 Apartment (Electricity, Heating, Cooling, Water, Garbage)",
                 "Mobile Phone Plan (Monthly, with Calls and 10GB+ Data)",
                 "Broadband Internet (Unlimited Data, 60 Mbps or Higher)"
         );
         for (String utility : utilities) {
-            Double utilityPrice = (Double) extractPriceByName(page, utility);
+            Double utilityPrice = extractPriceByName(page, utility);
             totalPrice += utilityPrice;
         }
         return totalPrice;
