@@ -75,17 +75,17 @@ public class LivingCost {
         map.put("fruits", fruits);
         map.put("vegetables", vegetables);
         map.put("water", water);
-        map.put("public-transport", publicTransport);
+        map.put("public_transport", publicTransport);
         map.put("gasoline", gasoline);
         map.put("car", car);
         map.put("utilities", utilities);
         map.put("childCare", childCare);
-        map.put("gym-monthly", gymMonthly);
-        map.put("bedroom-month", bedroomMonth);
-        map.put("appartment-month", appartmentMonth);
-        map.put("appartment-buy", appartmentBuy);
-        map.put("salary-month", salaryMonth);
-        map.put("interest-rate", interestRateTwentyYears);
+        map.put("gym_monthly", gymMonthly);
+        map.put("bedroom_month", bedroomMonth);
+        map.put("appartment_month", appartmentMonth);
+        map.put("appartment_buy", appartmentBuy);
+        map.put("salary_month", salaryMonth);
+        map.put("interest_rate", interestRateTwentyYears);
         return map;
     }
 
@@ -104,17 +104,17 @@ public class LivingCost {
                 extractDouble(map.get("fruits")),
                 extractDouble(map.get("vegetables")),
                 extractDouble(map.get("water")),
-                extractDouble(map.get("public-transport")),
+                extractDouble(map.get("public_transport")),
                 extractDouble(map.get("gasoline")),
                 extractDouble(map.get("car")),
                 extractDouble(map.get("utilities")),
                 extractDouble(map.get("childCare")),
-                extractDouble(map.get("gym-monthly")),
-                extractDouble(map.get("bedroom-month")),
-                extractDouble(map.get("appartment-month")),
-                extractDouble(map.get("appartment-buy")),
-                extractDouble(map.get("salary-month")),
-                extractDouble(map.get("interest-rate")),
+                extractDouble(map.get("gym_monthly")),
+                extractDouble(map.get("bedroom_month")),
+                extractDouble(map.get("appartment_month")),
+                extractDouble(map.get("appartment_buy")),
+                extractDouble(map.get("salary_month")),
+                extractDouble(map.get("interest_rate")),
                 map.get("date") instanceof String ? LocalDate.parse((String) map.get("date")) : (LocalDate) map.get("date"),
                 map.get("time") instanceof String ? LocalTime.parse((String) map.get("time")) : (LocalTime) map.get("time")
         );
