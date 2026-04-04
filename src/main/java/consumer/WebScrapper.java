@@ -2,6 +2,8 @@ package consumer;
 import com.microsoft.playwright.*;
 import models.LivingCost;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -52,9 +54,13 @@ public class WebScrapper implements AutoCloseable{
 
     private void navigateToCountryUrl(Page page, String countryName) {
         String countryUrl = countryName.replace(" ", "+");
-        String targetUrl = URL + countryName;
+        String targetUrl = URL + countryUrl;
         page.navigate(targetUrl);
-        page.waitForLoadState();
+        try {
+            page.waitForSelector("td.priceValue", new Page.WaitForSelectorOptions().setTimeout(7932));
+        } catch (PlaywrightException e) {
+            System.err.println("Cloudflare nos bloqueó o la página tardó demasiado en " + countryName);
+        }
     }
 
     private LivingCost buildLivingCostModel(Page page, String countryName) {
@@ -111,16 +117,23 @@ public class WebScrapper implements AutoCloseable{
     }
 
     private double parsePrice(String rawPrice) {
-        String numericText = rawPrice.replaceAll("[^\\d.]", "").replace(",", "");
-        if (numericText.isEmpty()) {
+        if (rawPrice == null || rawPrice.isEmpty()) {
             return 0.0;
         }
 
-        try {
-            return Double.parseDouble(numericText);
-        } catch (NumberFormatException e) {
-            return 0.0;
+        Pattern pattern = Pattern.compile("\\d+(,\\d+)*(\\.\\d+)?");
+        Matcher matcher = pattern.matcher(rawPrice);
+
+        if (matcher.find()) {
+            String cleanNumber = matcher.group().replace(",", "");
+            try {
+                return Double.parseDouble(cleanNumber);
+            } catch (NumberFormatException e) {
+                return 0.0;
+            }
         }
+
+        return 0.0;
     }
 
     private double extractFruits(Page page) {

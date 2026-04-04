@@ -1,8 +1,10 @@
 package database;
 import models.ExchangeRate;
 import models.LivingCost;
+import java.util.ArrayList;
 
 import java.sql.*;
+import java.util.List;
 
 public class DatabaseHelper{
     private static volatile DatabaseHelper instance;
@@ -51,7 +53,7 @@ public class DatabaseHelper{
         try (Statement statement = connection.createStatement()) {
             statement.execute(sql);
         } catch (SQLException e) {
-            System.out.println("Failed to create table exchage-rate: " + e.getMessage());
+            System.out.println("Failed to create table exchage_rate: " + e.getMessage());
         }
 
         sql = "CREATE TABLE IF NOT EXISTS cost_of_living (" +
@@ -86,12 +88,24 @@ public class DatabaseHelper{
         try (Statement statement = connection.createStatement()) {
             statement.execute(sql);
         } catch (SQLException e) {
-            System.out.println("Failed to create table cost-of-living: " + e.getMessage());
+            System.out.println("Failed to create table cost_of_living: " + e.getMessage());
         }
+
+        sql = "CREATE TABLE IF NOT EXISTS scrapper_queue(" +
+                "country TEXT PRIMARY KEY," +
+                "last_scrapped TEXT" +
+                ");";
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(sql);
+        } catch (SQLException e) {
+            System.out.println("Failed to create table scrapper_queue: " + e.getMessage());
+        }
+
+        startQueue();
     }
 
     public void insertExchangeRate(ExchangeRate rate){
-        String sql = "INSERT INTO exchange-rate " +
+        String sql = "INSERT INTO exchange_rate " +
                 "(from_currency, to_currency, exchange_rate, last_refreshed, time_zone)" +
                 "VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
@@ -148,6 +162,129 @@ public class DatabaseHelper{
         } catch (SQLException e) {
             System.out.println("Error inserting cost of living: " + e.getMessage());
         }
+    }
+
+    public void insertCountryToQueue(String country){
+        String sql = "INSERT OR IGNORE INTO scrapper_queue (country, last_scrapped) VALUES (?, '0')";
+        try (PreparedStatement statement = getConnection().prepareStatement(sql)){
+            statement.setString(1, country);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Failed to insert scrapper_queue: " + e.getMessage());
+        }
+    }
+
+    public void startQueue() {
+        List<String> initialCountries = List.of(
+                "Spain",
+                "France",
+                "Switzerland",
+                "Germany",
+                "United Kingdom",
+                "Italy",
+                "Greece",
+                "Finland",
+                "Sweden",
+                "Norway",
+                "Austria",
+                "Russia",
+                "Andorra",
+                "China",
+                "Japan",
+                "Australia",
+                "United States",
+                "Canada",
+                "Mexico",
+                "Argentina",
+                "Peru",
+                "Brazil",
+                "Ireland",
+                "Netherlands",
+                "Thailand",
+                "India",
+                "South Korea",
+                "United Arab Emirates",
+                "Portugal",
+                "Cayman Islands",
+                "Dominican Republic",
+                "Panama",
+                "Qatar",
+                "Israel",
+                "South Africa"
+        );
+
+        for (String country : initialCountries){
+            insertCountryToQueue(country);
+        }
+    }
+
+    public String getNextCountry() {
+        String sql = "SELECT country FROM scrapper_queue ORDER BY last_scrapped ASC LIMIT 1";
+
+        try (Statement statement = getConnection().createStatement();
+             ResultSet result = statement.executeQuery(sql)){
+
+            if (result.next()) {
+                return result.getString("country");
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to get nextCountry: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public void setCountryAsScrapped(String country) {
+        String sql = "UPDATE scrapper_queue SET last_scrapped = CURRENT_TIMESTAMP WHERE country = ?";
+        try (PreparedStatement statement = getConnection().prepareStatement(sql)){
+            statement.setString(1, country);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Failed to set country as scrapped: " + e.getMessage());
+        }
+    }
+
+    public List<LivingCost> getLastInserts() {
+        List<LivingCost> livingCosts = new ArrayList<>();
+
+        String sql = "SELECT * FROM cost_of_living ORDER BY date DESC, time DESC LIMIT 2";
+        try (Statement statement = getConnection().createStatement();
+             ResultSet result = statement.executeQuery(sql)) {
+            while (result.next()) {
+                java.util.Map<String, Object> rowMap = new java.util.HashMap<>();
+
+                rowMap.put("country", result.getString("country"));
+                rowMap.put("currency", result.getString("currency"));
+                rowMap.put("capuccino", result.getDouble("capuccino"));
+                rowMap.put("milk", result.getDouble("milk"));
+                rowMap.put("bread", result.getDouble("bread"));
+                rowMap.put("rice", result.getDouble("rice"));
+                rowMap.put("eggs", result.getDouble("eggs"));
+                rowMap.put("cheese", result.getDouble("cheese"));
+                rowMap.put("chicken", result.getDouble("chicken"));
+                rowMap.put("beef", result.getDouble("beef"));
+                rowMap.put("fruits", result.getDouble("fruits"));
+                rowMap.put("vegetables", result.getDouble("vegetables"));
+                rowMap.put("water", result.getDouble("water"));
+                rowMap.put("public_transport", result.getDouble("public_transport"));
+                rowMap.put("gasoline", result.getDouble("gasoline"));
+                rowMap.put("car", result.getDouble("car"));
+                rowMap.put("utilities", result.getDouble("utilities"));
+                rowMap.put("child_care", result.getDouble("child_care"));
+                rowMap.put("gym_monthly", result.getDouble("gym_monthly"));
+                rowMap.put("bedroom_month", result.getDouble("bedroom_month"));
+                rowMap.put("appartment_month", result.getDouble("appartment_month"));
+                rowMap.put("appartment_buy", result.getDouble("appartment_buy"));
+                rowMap.put("salary_month", result.getDouble("salary_month"));
+                rowMap.put("interest_rate_twenty_years", result.getDouble("interest_rate_twenty_years"));
+                rowMap.put("date", result.getString("date"));
+                rowMap.put("time", result.getString("time"));
+
+                livingCosts.add(LivingCost.fromMap(rowMap));
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to getLastInserts: " + e.getMessage());
+        }
+        return livingCosts;
     }
 }
 
