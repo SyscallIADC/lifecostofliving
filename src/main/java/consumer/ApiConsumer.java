@@ -1,29 +1,32 @@
 package consumer;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import models.ExchangeRate;
+import org.springframework.stereotype.Component;
+
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import models.ExchangeRate;
-
-
+@Component
 public class ApiConsumer {
 
     private static final String BASE_URL = "https://www.alphavantage.co/query";
     private final String apiKey;
 
-
     public ApiConsumer() {
         this.apiKey = System.getenv("ALPHAVANTAGE_API_KEY");
+
         if (this.apiKey == null || this.apiKey.isEmpty()) {
-            throw new RuntimeException("API key no encontrada. Define la variable de entorno ALPHAVANTAGE_API_KEY");
+            throw new RuntimeException(
+                    "API key no encontrada. Define la variable de entorno ALPHAVANTAGE_API_KEY"
+            );
         }
     }
 
-
     public ExchangeRate getExchangeRate(String fromCurrency, String toCurrency) throws Exception {
+
         String urlStr = String.format(
                 "%s?function=CURRENCY_EXCHANGE_RATE&from_currency=%s&to_currency=%s&apikey=%s",
                 BASE_URL, fromCurrency, toCurrency, apiKey
@@ -39,10 +42,12 @@ public class ApiConsumer {
         }
 
         try (InputStreamReader reader = new InputStreamReader(connection.getInputStream())) {
+
             Gson gson = new Gson();
             JsonObject jsonResponse = gson.fromJson(reader, JsonObject.class);
 
             JsonObject data = jsonResponse.getAsJsonObject("Realtime Currency Exchange Rate");
+
             if (data == null || data.size() == 0) {
                 throw new RuntimeException("Respuesta inválida de la API");
             }
@@ -54,6 +59,7 @@ public class ApiConsumer {
                     data.get("6. Last Refreshed").getAsString(),
                     data.get("7. Time Zone").getAsString()
             );
+
         } finally {
             connection.disconnect();
         }
