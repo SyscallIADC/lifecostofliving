@@ -1,14 +1,31 @@
 package scheduler;
+
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
 import database.DatabaseHelper;
 import models.LivingCost;
 import consumer.WebScrapper;
 
-public class LivingCostExtraction implements Runnable {
+import java.util.Random;
+
+@Component
+public class LivingCostExtraction{
+    private final Random random = new Random();
+
     public LivingCostExtraction() {
     }
 
-    @Override
+    @Scheduled(fixedDelay = 900000)
     public void run() {
+        try {
+            System.out.println("Adding extra delay...");
+            int randomExtraDelay = random.nextInt(240000) + 60000;
+            Thread.sleep(randomExtraDelay);
+        } catch (InterruptedException e) {
+            System.out.println("Error in applying extra delay " + e.getMessage());
+        }
+
         System.out.println("Starting Living Cost Extraction...");
         String nextContry = DatabaseHelper.getInstance().getNextCountry();
 
