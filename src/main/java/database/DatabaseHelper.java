@@ -50,7 +50,7 @@ public class DatabaseHelper{
                 "time_zone TEXT," +
                 "PRIMARY KEY (from_currency, to_currency, last_refreshed)" +
                 ");";
-        try (Statement statement = connection.createStatement()) {
+        try (Statement statement = getConnection().createStatement()) {
             statement.execute(sql);
         } catch (SQLException e) {
             System.out.println("Failed to create table exchage_rate: " + e.getMessage());
@@ -85,7 +85,7 @@ public class DatabaseHelper{
                 "time TEXT NOT NULL, " +
                 "PRIMARY KEY (country, date, time)" +
                 ");";
-        try (Statement statement = connection.createStatement()) {
+        try (Statement statement = getConnection().createStatement()) {
             statement.execute(sql);
         } catch (SQLException e) {
             System.out.println("Failed to create table cost_of_living: " + e.getMessage());
@@ -108,7 +108,7 @@ public class DatabaseHelper{
         String sql = "INSERT INTO exchange_rate " +
                 "(from_currency, to_currency, exchange_rate, last_refreshed, time_zone)" +
                 "VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (PreparedStatement pstmt = getConnection().prepareStatement(sql)) {
             pstmt.setString(1, rate.getFromCurrency());
             pstmt.setString(2, rate.getToCurrency());
             pstmt.setDouble(3, rate.getExchangeRate());
