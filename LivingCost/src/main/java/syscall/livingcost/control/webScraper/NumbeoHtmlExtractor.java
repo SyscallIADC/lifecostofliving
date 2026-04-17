@@ -27,6 +27,9 @@ public class NumbeoHtmlExtractor {
     );
 
     public NumbeoLivingCostData extract(String page) {
+        if (page == null) {
+            throw new IllegalArgumentException("El documento HTML no puede ser null");
+        }
         Document html = Jsoup.parse(page);
         validateDocument(html);
 
