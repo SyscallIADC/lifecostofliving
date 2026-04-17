@@ -37,7 +37,7 @@ public class SQLiteCountryQueueStoreTest {
 
         String first = store.getNextCountry();
         assertNotNull(first);
-        assertTrue(first.equals("Spain") || first.equals("France"));
+        assertTrue(first.equals("Spain") || first.equals("Peru"));
     }
 
     @Test
