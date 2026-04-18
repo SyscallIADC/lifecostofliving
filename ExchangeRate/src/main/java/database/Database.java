@@ -5,11 +5,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Database{
+public class Database {
+
     private static volatile Database instance;
     private static final String DATABASE_PATH = "jdbc:sqlite:database.db";
-    protected Connection connection;
-    private Database(){
+    private Connection connection;
+
+    private Database() {
         try {
             connection = DriverManager.getConnection(DATABASE_PATH);
             createTables();
@@ -21,26 +23,22 @@ public class Database{
     public static Database getInstance() {
         if (instance == null) {
             synchronized (Database.class) {
-                if (instance == null) {
-                    instance = new Database();
-                }
+                if (instance == null) instance = new Database();
             }
         }
         return instance;
     }
 
-
     Connection getConnection() {
         try {
-            if (connection == null | connection.isClosed()) {
+            if (connection == null || connection.isClosed()) {
                 connection = DriverManager.getConnection(DATABASE_PATH);
             }
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             System.out.println("Failed to connect to database: " + e.getMessage());
         }
         return connection;
     }
-
 
     private void createTables() {
         String sql = "CREATE TABLE IF NOT EXISTS exchange_rate (" +
@@ -48,15 +46,13 @@ public class Database{
                 "to_currency TEXT NOT NULL, " +
                 "exchange_rate REAL, " +
                 "last_refreshed TEXT, " +
-                "time_zone TEXT," +
+                "time_zone TEXT, " +
                 "PRIMARY KEY (from_currency, to_currency, last_refreshed)" +
                 ");";
         try (Statement statement = connection.createStatement()) {
             statement.execute(sql);
         } catch (SQLException e) {
-            System.out.println("Failed to create table exchage-rate: " + e.getMessage());
+            System.out.println("Failed to create table exchange_rate: " + e.getMessage());
         }
     }
-
-
 }

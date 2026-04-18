@@ -9,9 +9,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class ExchangeRateConsumer implements Consumer<ExchangeRate> {
+
     private static final String BASE_URL = "https://www.alphavantage.co/query";
     private final String apiKey;
-
 
     public ExchangeRateConsumer() {
         this.apiKey = System.getenv("ALPHAVANTAGE_API_KEY");
@@ -21,40 +21,36 @@ public class ExchangeRateConsumer implements Consumer<ExchangeRate> {
     }
 
     @Override
-    public ExchangeRate extractData(String fromCurrency, String toCurrency) throws Exception{
-        String urlStr = String.format(
-                "%s?function=CURRENCY_EXCHANGE_RATE&from_currency=%s&to_currency=%s&apikey=%s",
-                BASE_URL, fromCurrency, toCurrency, apiKey
-        );
-
-        URL url = new URL(urlStr);
+    public ExchangeRate extractData(String fromCurrency, String toCurrency) throws Exception {
+        URL url = new URL(buildUrl(fromCurrency, toCurrency));
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
 
-        int responseCode = connection.getResponseCode();
-        if (responseCode != 200) {
-            throw new RuntimeException("Error HTTP: " + responseCode);
+        if (connection.getResponseCode() != 200) {
+            throw new RuntimeException("Error HTTP: " + connection.getResponseCode());
         }
 
         try (InputStreamReader reader = new InputStreamReader(connection.getInputStream())) {
-            Gson gson = new Gson();
-            JsonObject jsonResponse = gson.fromJson(reader, JsonObject.class);
-
-            JsonObject data = jsonResponse.getAsJsonObject("Realtime Currency Exchange Rate");
-            if (data == null || data.size() == 0) {
-                throw new RuntimeException("Respuesta inválida de la API");
-            }
-
-            return new ExchangeRate(
-                    data.get("1. From_Currency Code").getAsString(),
-                    data.get("3. To_Currency Code").getAsString(),
-                    data.get("5. Exchange Rate").getAsDouble(),
-                    data.get("6. Last Refreshed").getAsString(),
-                    data.get("7. Time Zone").getAsString()
-            );
-        } finally {
-            connection.disconnect();
+            return parseResponse(new Gson().fromJson(reader, JsonObject.class));
         }
     }
 
+    private String buildUrl(String fromCurrency, String toCurrency) {
+        return String.format(
+                "%s?function=CURRENCY_EXCHANGE_RATE&from_currency=%s&to_currency=%s&apikey=%s",
+                BASE_URL, fromCurrency, toCurrency, apiKey
+        );
+    }
+
+    private ExchangeRate parseResponse(JsonObject json) {
+        JsonObject data = json.getAsJsonObject("Realtime Currency Exchange Rate");
+        if (data == null) throw new RuntimeException("Respuesta inválida de la API");
+        return new ExchangeRate(
+                data.get("1. From_Currency Code").getAsString(),
+                data.get("3. To_Currency Code").getAsString(),
+                data.get("5. Exchange Rate").getAsDouble(),
+                data.get("6. Last Refreshed").getAsString(),
+                data.get("7. Time Zone").getAsString()
+        );
+    }
 }
