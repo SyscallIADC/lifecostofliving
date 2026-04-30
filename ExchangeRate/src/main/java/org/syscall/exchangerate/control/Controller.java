@@ -1,10 +1,9 @@
 package org.syscall.exchangerate.control;
 
-
-import org.syscall.exchangerate.control.database.ExchangeRateStore;
 import org.syscall.exchangerate.control.feeder.ExchangeRateFeeder;
 import org.syscall.exchangerate.models.ExchangeRate;
 
+import javax.jms.JMSException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -12,11 +11,10 @@ import java.util.concurrent.TimeUnit;
 public class Controller {
 
     private final ExchangeRateFeeder feeder;
-    private final ExchangeRateStore store;
+    private final ActiveMQExchangeRatePublisher publisher;
     private final ScheduledExecutorService executor;
 
     private static final String BASE_CURRENCY = "EUR";
-
     private static final String[] CURRENCIES = {
             "CHF", "GBP", "INR", "RUB",
             "JPY", "CNY", "AUD", "USD", "MXN", "ARS",
@@ -24,16 +22,21 @@ public class Controller {
             "KYD", "DOP", "ILS", "QAR", "ZAR"
     };
 
-    public Controller(ExchangeRateFeeder feeder, ExchangeRateStore store) {
+    public Controller(ExchangeRateFeeder feeder, ActiveMQExchangeRatePublisher publisher) {
         this.feeder = feeder;
-        this.store = store;
+        this.publisher = publisher;
         this.executor = Executors.newSingleThreadScheduledExecutor();
     }
 
-
     public void start() {
+        try {
+            publisher.start();
+        } catch (JMSException e) {
+            System.out.println("Error al conectar con ActiveMQ: " + e.getMessage());
+            return;
+        }
         System.out.println("Controller iniciado. Ejecutando cada 24 horas.");
-        executor.scheduleAtFixedRate(this::fetchAndStore, 0, 24, TimeUnit.HOURS);
+        executor.scheduleAtFixedRate(this::fetchAndPublish, 0, 24, TimeUnit.HOURS);
     }
 
     public void stop() {
@@ -41,13 +44,16 @@ public class Controller {
         executor.shutdown();
         try {
             if (!executor.awaitTermination(5, TimeUnit.SECONDS)) executor.shutdownNow();
+            publisher.stop();
         } catch (InterruptedException e) {
             executor.shutdownNow();
             Thread.currentThread().interrupt();
+        } catch (JMSException e) {
+            System.out.println("Error al cerrar publisher: " + e.getMessage());
         }
     }
 
-    private void fetchAndStore() {
+    private void fetchAndPublish() {
         System.out.println("Iniciando ciclo de consultas...");
         int success = 0, failed = 0;
 
@@ -55,7 +61,7 @@ public class Controller {
             try {
                 Thread.sleep(1500);
                 ExchangeRate rate = feeder.feed(BASE_CURRENCY, currency);
-                store.insertData(rate);
+                publisher.publish(rate);
                 System.out.println("EUR -> " + currency + " = " + rate.getExchangeRate());
                 success++;
             } catch (Exception e) {
