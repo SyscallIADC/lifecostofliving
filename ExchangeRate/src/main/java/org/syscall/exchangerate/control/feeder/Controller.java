@@ -1,6 +1,5 @@
-package org.syscall.exchangerate.control;
+package org.syscall.exchangerate.control.feeder;
 
-import org.syscall.exchangerate.control.feeder.ExchangeRateFeeder;
 import org.syscall.exchangerate.models.ExchangeRate;
 
 import javax.jms.JMSException;
