@@ -1,17 +1,18 @@
-package scheduler;
+package org.syscall.exchangerate.control;
 
-import consumer.Consumer;
-import database.DatabaseHelper;
-import models.ExchangeRate;
+
+import org.syscall.exchangerate.control.database.ExchangeRateStore;
+import org.syscall.exchangerate.control.feeder.ExchangeRateFeeder;
+import org.syscall.exchangerate.models.ExchangeRate;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class ExchangeRateScheduler implements Scheduler {
+public class Controller {
 
-    private final Consumer<ExchangeRate> consumer;
-    private final DatabaseHelper<ExchangeRate> database;
+    private final ExchangeRateFeeder feeder;
+    private final ExchangeRateStore store;
     private final ScheduledExecutorService executor;
 
     private static final String BASE_CURRENCY = "EUR";
@@ -23,31 +24,23 @@ public class ExchangeRateScheduler implements Scheduler {
             "KYD", "DOP", "ILS", "QAR", "ZAR"
     };
 
-    public ExchangeRateScheduler(Consumer<ExchangeRate> consumer, DatabaseHelper<ExchangeRate> database) {
-        this.consumer = consumer;
-        this.database = database;
+    public Controller(ExchangeRateFeeder feeder, ExchangeRateStore store) {
+        this.feeder = feeder;
+        this.store = store;
         this.executor = Executors.newSingleThreadScheduledExecutor();
     }
 
-    @Override
+
     public void start() {
-        System.out.println("Scheduler iniciado. Ejecutando cada 24 horas.");
-        executor.scheduleAtFixedRate(
-                this::fetchAndStore,
-                0,
-                24,
-                TimeUnit.HOURS
-        );
+        System.out.println("Controller iniciado. Ejecutando cada 24 horas.");
+        executor.scheduleAtFixedRate(this::fetchAndStore, 0, 24, TimeUnit.HOURS);
     }
 
-    @Override
     public void stop() {
-        System.out.println("Scheduler detenido.");
+        System.out.println("Controller detenido.");
         executor.shutdown();
         try {
-            if (!executor.awaitTermination(5, TimeUnit.SECONDS)) {
-                executor.shutdownNow();
-            }
+            if (!executor.awaitTermination(5, TimeUnit.SECONDS)) executor.shutdownNow();
         } catch (InterruptedException e) {
             executor.shutdownNow();
             Thread.currentThread().interrupt();
@@ -56,14 +49,13 @@ public class ExchangeRateScheduler implements Scheduler {
 
     private void fetchAndStore() {
         System.out.println("Iniciando ciclo de consultas...");
-        int success = 0;
-        int failed = 0;
+        int success = 0, failed = 0;
 
         for (String currency : CURRENCIES) {
             try {
                 Thread.sleep(1500);
-                ExchangeRate rate = consumer.extractData(BASE_CURRENCY, currency);
-                database.insertData(rate);
+                ExchangeRate rate = feeder.feed(BASE_CURRENCY, currency);
+                store.insertData(rate);
                 System.out.println("EUR -> " + currency + " = " + rate.getExchangeRate());
                 success++;
             } catch (Exception e) {
@@ -71,7 +63,6 @@ public class ExchangeRateScheduler implements Scheduler {
                 failed++;
             }
         }
-
         System.out.println("Ciclo completado. Éxitos: " + success + " | Fallos: " + failed);
     }
 }

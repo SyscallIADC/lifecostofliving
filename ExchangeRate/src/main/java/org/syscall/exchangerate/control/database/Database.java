@@ -1,4 +1,4 @@
-package database;
+package org.syscall.exchangerate.control.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

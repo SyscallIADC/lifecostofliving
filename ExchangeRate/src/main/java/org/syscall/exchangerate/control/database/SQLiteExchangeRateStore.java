@@ -1,12 +1,12 @@
-package database;
+package org.syscall.exchangerate.control.database;
 
-import models.ExchangeRate;
+import org.syscall.exchangerate.models.ExchangeRate;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExchangeRatePersistance implements DatabaseHelper<ExchangeRate> {
+public class SQLiteExchangeRateStore implements ExchangeRateStore {
 
     private Connection getConnection() {
         return Database.getInstance().getConnection();

@@ -1,19 +1,19 @@
-package consumer;
+package org.syscall.exchangerate.control.feeder;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import models.ExchangeRate;
+import org.syscall.exchangerate.models.ExchangeRate;
 
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class ExchangeRateConsumer implements Consumer<ExchangeRate> {
+public class APIExchangeRateFeeder implements ExchangeRateFeeder {
 
     private static final String BASE_URL = "https://www.alphavantage.co/query";
     private final String apiKey;
 
-    public ExchangeRateConsumer() {
+    public APIExchangeRateFeeder() {
         this.apiKey = System.getenv("ALPHAVANTAGE_API_KEY");
         if (this.apiKey == null || this.apiKey.isEmpty()) {
             throw new RuntimeException("API key no encontrada. Define la variable de entorno ALPHAVANTAGE_API_KEY");
@@ -21,7 +21,7 @@ public class ExchangeRateConsumer implements Consumer<ExchangeRate> {
     }
 
     @Override
-    public ExchangeRate extractData(String fromCurrency, String toCurrency) throws Exception {
+    public ExchangeRate feed(String fromCurrency, String toCurrency) throws Exception {
         URL url = new URL(buildUrl(fromCurrency, toCurrency));
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
