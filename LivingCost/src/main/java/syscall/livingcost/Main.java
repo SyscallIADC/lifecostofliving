@@ -16,15 +16,13 @@ import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
-        DatabaseHelper.initialize(args[0]);
-        LivingCostStore store = new SQLiteLivingCostStore(args[0]);
         CountryQueueInitializer.initialize(args[0]);
         CountryQueueStore countryQueue = new SQLiteCountryQueueStore(args[0]);
         NumbeoHtmlExtractor extractor = new NumbeoHtmlExtractor();
         PlaywrightWebScraper scraper = new PlaywrightWebScraper();
         LivingCostFeeder feeder = new NumbeoLivingCostFeeder(scraper, extractor);
         Random random =  new Random();
-        LivingCostController controller = new LivingCostController(store, feeder, countryQueue, random);
+        LivingCostController controller = new LivingCostController(feeder, countryQueue, random);
         controller.run();
     }
 }

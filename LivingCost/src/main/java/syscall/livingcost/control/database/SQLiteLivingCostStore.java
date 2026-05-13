@@ -48,8 +48,6 @@ public class SQLiteLivingCostStore implements LivingCostStore {
             pstmt.setDouble(22, cost.apartmentBuy());
             pstmt.setDouble(23, cost.salaryMonth());
             pstmt.setDouble(24, cost.interestRate());
-            pstmt.setString(25, cost.date().toString());
-            pstmt.setString(26, cost.time().toString());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {

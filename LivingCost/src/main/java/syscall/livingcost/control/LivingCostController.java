@@ -11,20 +11,18 @@ import java.util.concurrent.TimeUnit;
 
 public class LivingCostController {
     private final LivingCostFeeder feeder;
-    private final LivingCostStore store;
     private final CountryQueueStore countryQueue;
     private final Random random;
 
-    public LivingCostController(LivingCostStore store, LivingCostFeeder feeder,
+    public LivingCostController(LivingCostFeeder feeder,
                                 CountryQueueStore countryQueue, Random random) {
         this.feeder = feeder;
-        this.store = store;
         this.countryQueue = countryQueue;
         this.random = random;
     }
 
     public void run() {
-        ExtractionJob extractionJob = new ExtractionJob(store, feeder, countryQueue, random);
+        ExtractionJob extractionJob = new ExtractionJob(feeder, countryQueue, random);
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         System.out.println("Starting LivingCost Module");
 

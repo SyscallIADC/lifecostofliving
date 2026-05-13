@@ -33,9 +33,7 @@ public class PersistenceMapper {
                 extractDouble(map.get("apartment_month")),
                 extractDouble(map.get("apartment_buy")),
                 extractDouble(map.get("salary_month")),
-                extractDouble(map.get("interest_rate")),
-                map.get("date") instanceof String ? LocalDate.parse((String) map.get("date")) : (LocalDate) map.get("date"),
-                map.get("time") instanceof String ? LocalTime.parse((String) map.get("time")) : (LocalTime) map.get("time")
+                extractDouble(map.get("interest_rate"))
         );
     }
 
