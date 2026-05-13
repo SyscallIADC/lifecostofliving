@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class APIExchangeRateFeeder implements Feeder<ExchangeRate> {
+public class APIExchangeRateFeeder implements ExchangeRateFeeder {
 
     private static final String BASE_URL = "https://www.alphavantage.co/query";
     private final String apiKey;
@@ -21,7 +21,7 @@ public class APIExchangeRateFeeder implements Feeder<ExchangeRate> {
     }
 
     @Override
-    public ExchangeRate extractData(String fromCurrency, String toCurrency) throws Exception {
+    public ExchangeRate feed(String fromCurrency, String toCurrency) throws Exception {
         URL url = new URL(buildUrl(fromCurrency, toCurrency));
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("GET");
