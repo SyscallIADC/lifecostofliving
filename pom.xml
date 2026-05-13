@@ -10,7 +10,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>ExchangeRate</module>
-        <module>EventStoreBuilder</module>
     </modules>
 
     <properties>

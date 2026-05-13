@@ -32,9 +32,7 @@ public class LivingCostFactory {
                 numbeoData.apartmentMonth(),
                 numbeoData.apartmentBuy(),
                 numbeoData.salaryMonth(),
-                numbeoData.interestRate(),
-                LocalDate.now(),
-                LocalTime.now()
+                numbeoData.interestRate()
         );
     }
 }
