@@ -1,22 +1,18 @@
-package org.syscall.exchangerate.control.feeder;
+package org.syscall.control.publisher;
 
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.syscall.exchangerate.models.ExchangeRate;
 
 import javax.jms.*;
+import java.sql.Connection;
 
 public class ActiveMQExchangeRatePublisher {
 
     private static final String BROKER_URL = "tcp://localhost:61616";
     private static final String TOPIC_NAME = "ExchangeRate";
-    private static final String SOURCE_ID = "ExchangeRate-feeder";
 
     private Connection connection;
     private Session session;
-    private MessageProducer producer;
+    public MessageProducer producer;
 
     public void start() throws JMSException {
         ConnectionFactory factory = new ActiveMQConnectionFactory(BROKER_URL);
@@ -28,19 +24,14 @@ public class ActiveMQExchangeRatePublisher {
         System.out.println("Publisher conectado a ActiveMQ.");
     }
 
-    public void publish(ExchangeRate rate) throws JMSException {
-        JsonObject json = new JsonObject();
-        json.addProperty("ts", rate.getLastRefreshed());
-        json.addProperty("ss", SOURCE_ID);
-        json.addProperty("from_currency", rate.getFromCurrency());
-        json.addProperty("to_currency", rate.getToCurrency());
-        json.addProperty("exchange_rate", rate.getExchangeRate());
-        json.addProperty("time_zone", rate.getTimeZone());
-
-        String jsonStr = new Gson().toJson(json);
+    public void send(String jsonStr) throws JMSException {
         TextMessage message = session.createTextMessage(jsonStr);
         producer.send(message);
         System.out.println("Evento publicado: " + jsonStr);
+    }
+
+    public Session getSession() {
+        return session;
     }
 
     public void stop() throws JMSException {

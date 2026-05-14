@@ -1,6 +1,7 @@
-package feeder;
+package org.syscall.control;
 
-import models.ExchangeRate;
+import org.syscall.control.feeder.ExchangeRateFeeder;
+import org.syscall.control.publisher.ActiveMQExchangeRatePublisher;
 
 import javax.jms.JMSException;
 import java.util.concurrent.Executors;
@@ -59,9 +60,8 @@ public class Controller {
         for (String currency : CURRENCIES) {
             try {
                 Thread.sleep(1500);
-                ExchangeRate rate = feeder.feed(BASE_CURRENCY, currency);
-                publisher.publish(rate);
-                System.out.println("EUR -> " + currency + " = " + rate.getExchangeRate());
+                feeder.feed(BASE_CURRENCY, currency);
+                System.out.println("EUR -> " + currency + " publicado.");
                 success++;
             } catch (Exception e) {
                 System.out.println("Error EUR -> " + currency + ": " + e.getMessage());
@@ -70,3 +70,4 @@ public class Controller {
         }
         System.out.println("Ciclo completado. Éxitos: " + success + " | Fallos: " + failed);
     }
+}

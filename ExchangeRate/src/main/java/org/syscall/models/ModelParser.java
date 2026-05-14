@@ -1,4 +1,4 @@
-package models;
+package org.syscall.models;
 
 import java.util.Map;
 
