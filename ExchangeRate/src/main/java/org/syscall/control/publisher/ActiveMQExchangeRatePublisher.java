@@ -3,14 +3,13 @@ package org.syscall.control.publisher;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
-import java.sql.Connection;
 
 public class ActiveMQExchangeRatePublisher {
 
     private static final String BROKER_URL = "tcp://localhost:61616";
     private static final String TOPIC_NAME = "ExchangeRate";
 
-    private Connection connection;
+    private javax.jms.Connection connection;
     private Session session;
     public MessageProducer producer;
 
