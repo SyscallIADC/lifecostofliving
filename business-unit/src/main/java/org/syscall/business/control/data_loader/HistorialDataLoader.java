@@ -32,6 +32,8 @@ public class HistorialDataLoader {
         }
     }
 
+
+
     private static void processFile(Path file, DatamartRepository datamart) {
         String pathStr = file.toString();
         String topic = pathStr.contains("LivingCost") ? "LivingCost" :

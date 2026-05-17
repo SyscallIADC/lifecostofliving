@@ -4,7 +4,7 @@ import com.microsoft.playwright.*;
 
 import java.util.Random;
 
-public class PlaywrightWebScraper implements WebScraper, AutoCloseable{
+public class PlaywrightWebScraper implements WebScraper, AutoCloseable {
     private static final String STANDARD_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
     private final Playwright playwright;
     private final Browser browser;
@@ -40,7 +40,7 @@ public class PlaywrightWebScraper implements WebScraper, AutoCloseable{
         return browser.newContext(
                 new Browser.NewContextOptions()
                         .setUserAgent(STANDARD_USER_AGENT)
-                        .setViewportSize(1920,1080)
+                        .setViewportSize(1920, 1080)
         );
     }
 
@@ -50,7 +50,7 @@ public class PlaywrightWebScraper implements WebScraper, AutoCloseable{
     }
 
     private void navigateToUrl(Page page, String url) {
-        Response response = page.navigate(url, new Page.NavigateOptions().setTimeout(10000));
+        Response response = page.navigate(url, new Page.NavigateOptions().setTimeout(30000));
         page.waitForLoadState();
 
         if (response != null) {

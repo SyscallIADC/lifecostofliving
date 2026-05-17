@@ -48,13 +48,14 @@ public class SQLiteLivingCostStore implements LivingCostStore {
             pstmt.setDouble(22, cost.apartmentBuy());
             pstmt.setDouble(23, cost.salaryMonth());
             pstmt.setDouble(24, cost.interestRate());
+            pstmt.setString(25, cost.date().toString());
+            pstmt.setString(26, cost.time().toString());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("Error inserting cost of living: " + e.getMessage());
         }
     }
-
     @Override
     public List<LivingCost> retrieveDataByDate(String date) {
         List<LivingCost> livingCosts= new ArrayList<>();

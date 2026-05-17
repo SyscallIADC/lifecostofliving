@@ -1,9 +1,10 @@
 package syscall.livingcost.control.feeder;
+
 import syscall.livingcost.control.webScraper.NumbeoLivingCostData;
 import syscall.livingcost.model.LivingCost;
 
-import java.time.LocalTime;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class LivingCostFactory {
 
@@ -32,7 +33,9 @@ public class LivingCostFactory {
                 numbeoData.apartmentMonth(),
                 numbeoData.apartmentBuy(),
                 numbeoData.salaryMonth(),
-                numbeoData.interestRate()
+                numbeoData.interestRate(),
+                LocalDate.now(),
+                LocalTime.now()
         );
     }
 }

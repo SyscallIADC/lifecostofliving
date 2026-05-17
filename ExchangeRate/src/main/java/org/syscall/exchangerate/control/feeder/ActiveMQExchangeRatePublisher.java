@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.syscall.exchangerate.models.ExchangeRate;
-
+import java.time.Instant;
 import javax.jms.*;
 
 public class ActiveMQExchangeRatePublisher {
@@ -29,15 +29,19 @@ public class ActiveMQExchangeRatePublisher {
     }
 
     public void publish(ExchangeRate rate) throws JMSException {
-        JsonObject json = new JsonObject();
-        json.addProperty("ts", rate.getLastRefreshed());
-        json.addProperty("ss", SOURCE_ID);
-        json.addProperty("from_currency", rate.getFromCurrency());
-        json.addProperty("to_currency", rate.getToCurrency());
-        json.addProperty("exchange_rate", rate.getExchangeRate());
-        json.addProperty("time_zone", rate.getTimeZone());
+        JsonObject data = new JsonObject();
+        data.addProperty("fromCurrency", rate.getFromCurrency());
+        data.addProperty("toCurrency", rate.getToCurrency());
+        data.addProperty("exchangeRate", rate.getExchangeRate());
+        data.addProperty("lastRefreshed", rate.getLastRefreshed());
+        data.addProperty("timeZone", rate.getTimeZone());
 
-        String jsonStr = new Gson().toJson(json);
+        JsonObject event = new JsonObject();
+        event.addProperty("ts", Instant.now().toString());
+        event.addProperty("ss", SOURCE_ID);
+        event.add("data", data);
+
+        String jsonStr = new Gson().toJson(event);
         TextMessage message = session.createTextMessage(jsonStr);
         producer.send(message);
         System.out.println("Evento publicado: " + jsonStr);

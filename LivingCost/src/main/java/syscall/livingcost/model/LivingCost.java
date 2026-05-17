@@ -27,5 +27,7 @@ public record LivingCost(
         double apartmentMonth,
         double apartmentBuy,
         double salaryMonth,
-        double interestRate
+        double interestRate,
+        LocalDate date,
+        LocalTime time
 ) {}
