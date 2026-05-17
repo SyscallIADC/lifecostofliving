@@ -2,6 +2,7 @@ package org.syscall.business.control.datamart;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.syscall.business.model.CountryStats;
 
 import java.sql.*;
 
@@ -141,5 +142,85 @@ public class DatamartDAO implements DatamartRepository {
         } catch (SQLException | NullPointerException e) {
             System.err.println("Error actualizando divisa " + currencyPair + ": " + e.getMessage());
         }
+    }
+
+    @Override
+    public CountryStats getCountryStats(String countryName) {
+        String sql = "SELECT * FROM LivingCostMetrics WHERE country = ? COLLATE NOCASE";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, countryName);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return mapResultSetToStats(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error buscando " + countryName + ": " + e.getMessage());
+        }
+        return null;
+    }
+
+    @Override
+    public java.util.List<org.syscall.business.model.CountryStats> getAllCountries() {
+        java.util.List<org.syscall.business.model.CountryStats> list = new java.util.ArrayList<>();
+        String sql = "SELECT * FROM LivingCostMetrics";
+        try (Connection conn = DriverManager.getConnection(URL);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            while (rs.next()) {
+                list.add(mapResultSetToStats(rs));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error obteniendo países: " + e.getMessage());
+        }
+        return list;
+    }
+
+    private CountryStats mapResultSetToStats(ResultSet rs) throws SQLException {
+        String countryCurrency = rs.getString("currency");
+
+        double rateToEur = getExchangeRate(countryCurrency, "EUR");
+
+        double foodBasketLocal = (rs.getDouble("milk") + rs.getDouble("rice") + rs.getDouble("bread") +
+                rs.getDouble("eggs") + rs.getDouble("cheese") + rs.getDouble("chicken") +
+                rs.getDouble("beef") + rs.getDouble("fruits") + rs.getDouble("vegetables")) * 4;
+
+        return new org.syscall.business.model.CountryStats(
+                rs.getString("country"),
+                rs.getDouble("bedroomMonth") * rateToEur,
+                rs.getDouble("apartmentMonth") * rateToEur,
+                foodBasketLocal * rateToEur,
+                rs.getDouble("utilities") * rateToEur,
+                rs.getDouble("publicTransport") * rateToEur,
+                rs.getDouble("gymMonthly") * rateToEur,
+                rs.getDouble("childCare") * rateToEur,
+                rs.getDouble("salaryMonth") * rateToEur
+        );
+    }
+
+    @Override
+    public double getExchangeRate(String fromCurrency, String toCurrency) {
+        if (fromCurrency.equalsIgnoreCase(toCurrency)) return 1.0;
+
+        String pair = fromCurrency.toUpperCase() + "_" + toCurrency.toUpperCase();
+        String sql = "SELECT exchange_rate FROM ExchangeRates WHERE currency_pair = ?";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, pair);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) return rs.getDouble("exchange_rate");
+        } catch (SQLException e) { System.err.println("Error buscando " + pair); }
+
+        String inversePair = toCurrency.toUpperCase() + "_" + fromCurrency.toUpperCase();
+        String sqlInv = "SELECT exchange_rate FROM ExchangeRates WHERE currency_pair = ?";
+        try (Connection conn = DriverManager.getConnection(URL);
+             PreparedStatement pstmt = conn.prepareStatement(sqlInv)) {
+            pstmt.setString(1, inversePair);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) return 1.0 / rs.getDouble("exchange_rate");
+        } catch (SQLException e) { System.err.println("Error buscando " + inversePair); }
+
+        System.out.println("⚠️ Sin datos de divisa para " + pair + ". Asumiendo 1:1");
+        return 1.0;
     }
 }
