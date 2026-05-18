@@ -15,11 +15,12 @@ public record CountryStats(
         return rent1Bed + foodBasket + utilities + transport;
     }
 
-    public double costGoodLiving() {
+    public double costOptimum() {
         return costSingle() + gym + (costSingle() * 0.40);
     }
 
     public double costFamily() {
-        return rent3Bed + (foodBasket * 2.5) + utilities + (transport * 2) + childCare;
+        double baseLivingCosts = foodBasket + utilities + transport;
+        return rent3Bed + (baseLivingCosts * 2.5);
     }
 }

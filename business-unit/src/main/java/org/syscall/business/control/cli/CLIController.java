@@ -25,7 +25,7 @@ public class CLIController {
         while (running) {
             System.out.println("\n--- CALCULADORA DE COSTE REAL ---");
             System.out.println("1. Analizar viabilidad de sueldo en un país");
-            System.out.println("2. Buscar destinos recomendados (Top 'Buen Vivir')");
+            System.out.println("2. Buscar destinos recomendados (Top 'Nivel Óptimo')");
             System.out.println("3. Comparar calidad de vida entre dos países");
             System.out.println("4. Salir");
             System.out.print("Elige una opción (1-4): ");
@@ -63,11 +63,12 @@ public class CLIController {
             return;
         }
 
-        System.out.println("\n--- RESULTADOS PARA " + stats.country().toUpperCase() + " (Todo en Euros) ---");
-        System.out.printf("Salario medio local neto: %.2f€\n\n", stats.avgSalary());
+        System.out.println("\n--- RESULTADOS PARA " + stats.country().toUpperCase() + " ---");
+        System.out.printf("Tu sueldo actual:  %.2f %s (Equivale a %.2f €)\n", rawSalary, userCurrency, salaryInEur);
+        System.out.printf("Salario medio local neto: %.2f €\n\n", stats.avgSalary());
 
         checkCategory("Soltero", salaryInEur, stats.costSingle());
-        checkCategory("Buen Vivir", salaryInEur, stats.costGoodLiving());
+        checkCategory("Nivel Óptimo", salaryInEur, stats.costOptimum());
         checkCategory("Familia", salaryInEur, stats.costFamily());
     }
 
@@ -82,21 +83,21 @@ public class CLIController {
         double rateToEur = datamart.getExchangeRate(userCurrency, "EUR");
         double salaryInEur = rawSalary * rateToEur;
 
-        System.out.printf("\n--- TOP 10 PAÍSES PARA 'BUEN VIVIR' CON %.2f€ (Convertido) ---\n", salaryInEur);
+        System.out.printf("\n--- TOP 10 PAÍSES PARA 'NIVEL ÓPTIMO' CON %.2f€ (Convertido) ---\n", salaryInEur);
         List<CountryStats> all = datamart.getAllCountries();
 
         List<CountryStats> viableCountries = all.stream()
-                .filter(s -> salaryInEur > s.costGoodLiving())
-                .sorted(Comparator.comparingDouble((CountryStats s) -> salaryInEur - s.costGoodLiving()).reversed())
+                .filter(s -> salaryInEur > s.costOptimum())
+                .sorted(Comparator.comparingDouble((CountryStats s) -> salaryInEur - s.costOptimum()).reversed())
                 .limit(10)
                 .toList();
 
         if (viableCountries.isEmpty()) {
-            System.out.println("❌ Con ese sueldo está difícil alcanzar el nivel de 'Buen Vivir'.");
+            System.out.println("❌ Con ese sueldo está difícil alcanzar un 'Nivel Óptimo' de vida en los registros actuales.");
         } else {
             for (CountryStats s : viableCountries) {
                 System.out.printf("✅ %-15s | Coste Vida: %7.2f€ | Ahorro mensual: %7.2f€\n",
-                        s.country(), s.costGoodLiving(), (salaryInEur - s.costGoodLiving()));
+                        s.country(), s.costOptimum(), (salaryInEur - s.costOptimum()));
             }
         }
     }

@@ -161,8 +161,8 @@ public class DatamartDAO implements DatamartRepository {
     }
 
     @Override
-    public java.util.List<org.syscall.business.model.CountryStats> getAllCountries() {
-        java.util.List<org.syscall.business.model.CountryStats> list = new java.util.ArrayList<>();
+    public java.util.List<CountryStats> getAllCountries() {
+        java.util.List<CountryStats> list = new java.util.ArrayList<>();
         String sql = "SELECT * FROM LivingCostMetrics";
         try (Connection conn = DriverManager.getConnection(URL);
              Statement stmt = conn.createStatement();
@@ -178,24 +178,9 @@ public class DatamartDAO implements DatamartRepository {
 
     private CountryStats mapResultSetToStats(ResultSet rs) throws SQLException {
         String countryCurrency = rs.getString("currency");
-
         double rateToEur = getExchangeRate(countryCurrency, "EUR");
 
-        double foodBasketLocal = (rs.getDouble("milk") + rs.getDouble("rice") + rs.getDouble("bread") +
-                rs.getDouble("eggs") + rs.getDouble("cheese") + rs.getDouble("chicken") +
-                rs.getDouble("beef") + rs.getDouble("fruits") + rs.getDouble("vegetables")) * 4;
-
-        return new org.syscall.business.model.CountryStats(
-                rs.getString("country"),
-                rs.getDouble("bedroomMonth") * rateToEur,
-                rs.getDouble("apartmentMonth") * rateToEur,
-                foodBasketLocal * rateToEur,
-                rs.getDouble("utilities") * rateToEur,
-                rs.getDouble("publicTransport") * rateToEur,
-                rs.getDouble("gymMonthly") * rateToEur,
-                rs.getDouble("childCare") * rateToEur,
-                rs.getDouble("salaryMonth") * rateToEur
-        );
+        return CountryStatsFactory.create(rs, rateToEur);
     }
 
     @Override
