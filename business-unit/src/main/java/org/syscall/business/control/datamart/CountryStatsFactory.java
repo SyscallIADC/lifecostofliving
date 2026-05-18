@@ -19,6 +19,7 @@ public class CountryStatsFactory {
 
         return new CountryStats(
                 rs.getString("country"),
+                rs.getString("capture_timestamp"),
                 rs.getDouble("bedroomMonth") * rateToEur,
                 rs.getDouble("apartmentMonth") * rateToEur,
                 foodBasketLocal * rateToEur,

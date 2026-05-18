@@ -2,6 +2,7 @@ package org.syscall.business.model;
 
 public record CountryStats(
         String country,
+        String timestamp,
         double rent1Bed,
         double rent3Bed,
         double foodBasket,
@@ -16,7 +17,7 @@ public record CountryStats(
     }
 
     public double costOptimum() {
-        return costSingle() + gym + (costSingle() * 0.40);
+        return costSingle() + gym + (costSingle() * 0.50);
     }
 
     public double costFamily() {
