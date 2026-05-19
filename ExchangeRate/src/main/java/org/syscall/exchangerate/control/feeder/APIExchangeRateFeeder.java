@@ -1,40 +1,38 @@
-package org.syscall.control.feeder;
+package org.syscall.exchangerate.control.feeder;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import org.syscall.control.api.APIConsumer;
-import org.syscall.control.publisher.ActiveMQExchangeRatePublisher;
-import org.syscall.control.publisher.Serializer;
-import org.syscall.models.ExchangeRate;
+import org.syscall.exchangerate.models.ExchangeRate;
 
-import javax.jms.JMSException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class APIExchangeRateFeeder implements ExchangeRateFeeder {
 
     private static final String BASE_URL = "https://www.alphavantage.co/query";
-    private static final String SOURCE_ID = "ExchangeRate-feeder";
-
     private final String apiKey;
-    private final APIConsumer apiConsumer;
-    private final Serializer serializer;
-    private final ActiveMQExchangeRatePublisher publisher;
 
-    public APIExchangeRateFeeder(ActiveMQExchangeRatePublisher publisher) {
+    public APIExchangeRateFeeder() {
         this.apiKey = System.getenv("ALPHAVANTAGE_API_KEY");
         if (this.apiKey == null || this.apiKey.isEmpty()) {
-            throw new RuntimeException("API key no encontrada. Define ALPHAVANTAGE_API_KEY");
+            throw new RuntimeException("API key no encontrada. Define la variable de entorno ALPHAVANTAGE_API_KEY");
         }
-        this.apiConsumer = new APIConsumer();
-        this.serializer = new Serializer();
-        this.publisher = publisher;
     }
 
     @Override
-    public void feed(String fromCurrency, String toCurrency) throws Exception {
-        String url = buildUrl(fromCurrency, toCurrency);
-        JsonObject response = apiConsumer.fetch(url);
-        ExchangeRate rate = parseResponse(response);
-        String json = serializer.serialize(rate, SOURCE_ID);
-        publisher.send(json);
+    public ExchangeRate feed(String fromCurrency, String toCurrency) throws Exception {
+        URL url = new URL(buildUrl(fromCurrency, toCurrency));
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+
+        if (connection.getResponseCode() != 200) {
+            throw new RuntimeException("Error HTTP: " + connection.getResponseCode());
+        }
+
+        try (InputStreamReader reader = new InputStreamReader(connection.getInputStream())) {
+            return parseResponse(new Gson().fromJson(reader, JsonObject.class));
+        }
     }
 
     private String buildUrl(String fromCurrency, String toCurrency) {
