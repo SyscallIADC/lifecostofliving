@@ -29,7 +29,8 @@ El Datamart analítico se ha implementado sobre **SQLite**. Esta elección se ju
 ### Arquitectura de Infraestructura (Sistema Completo)
 El proyecto implementa un flujo de datos basado en el patrón **Publisher/Subscriber** utilizando Apache ActiveMQ como broker de mensajería. Esto desacopla completamente los procesos de extracción (Feeders) de los procesos de transformación y carga (Event Store y Business Unit), permitiendo una arquitectura escalable orientada a eventos.
 
-[AQUÍ INCLUIR IMAGEN DEL DIAGRAMA DE ARQUITECTURA DEL SISTEMA]
+<img width="1190" height="666" alt="image" src="https://github.com/user-attachments/assets/23217d10-bbb8-4d21-8d48-6bdb6ad5cf3a" />
+
 
 ### Arquitectura de la Aplicación (Módulo Business Unit)
 A nivel de software, el módulo principal de análisis se ha estructurado siguiendo el patrón arquitectónico **MVC (Model-View-Controller)**. Esto aísla la capa de presentación (CLI) de la lógica de negocio matemática y de las operaciones de persistencia en la base de datos (DAO).
