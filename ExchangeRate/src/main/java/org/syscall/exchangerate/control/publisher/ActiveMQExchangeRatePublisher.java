@@ -4,11 +4,13 @@ package org.syscall.exchangerate.control.publisher;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.syscall.exchangerate.control.feeder.ExchangeRateFeeder;
 import org.syscall.exchangerate.models.ExchangeRate;
 import java.time.Instant;
 import javax.jms.*;
 
-public class ActiveMQExchangeRatePublisher {
+public class ActiveMQExchangeRatePublisher implements ExchangeRatePublisher {
+
 
     private static final String BROKER_URL = "failover:(tcp://localhost:61616)?randomize=false";
     private static final String TOPIC_NAME = "ExchangeRate";
@@ -18,6 +20,7 @@ public class ActiveMQExchangeRatePublisher {
     private Session session;
     private MessageProducer producer;
 
+    @Override
     public void start() throws JMSException {
         ConnectionFactory factory = new ActiveMQConnectionFactory(BROKER_URL);
         connection = factory.createConnection();
@@ -27,7 +30,7 @@ public class ActiveMQExchangeRatePublisher {
         producer = session.createProducer(topic);
         System.out.println("Publisher conectado a ActiveMQ.");
     }
-
+    @Override
     public void publish(ExchangeRate rate) throws JMSException {
         JsonObject data = new JsonObject();
         data.addProperty("fromCurrency", rate.getFromCurrency());
@@ -46,7 +49,7 @@ public class ActiveMQExchangeRatePublisher {
         producer.send(message);
         System.out.println("Evento publicado: " + jsonStr);
     }
-
+    @Override
     public void stop() throws JMSException {
         if (producer != null) producer.close();
         if (session != null) session.close();
