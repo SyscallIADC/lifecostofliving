@@ -36,6 +36,10 @@ A nivel de software, el módulo principal de análisis se ha estructurado siguie
 
 [AQUÍ INCLUIR IMAGEN DEL DIAGRAMA DE CLASES]
 
+### Arquitectura de los Feeders (LivingCost y ExchangeRate)
+Cada uno de los módulos que forman parte del publisher siguiendo un modelo **Model-Controller**. Así cada uno tiene su particularización del feeder, obteniendo datos o de una API o de un WebScrapper.
+<img width="1280" height="590" alt="image" src="https://github.com/user-attachments/assets/d9010a04-9fd7-4d6e-9425-36e9166d1170" />
+
 ## 5. Principios y Patrones de Diseño Aplicados
 
 Para garantizar que el código sea mantenible, escalable y fácil de testear, se han aplicado rigurosamente diversos principios de ingeniería de software y patrones de diseño en la construcción de los módulos.
