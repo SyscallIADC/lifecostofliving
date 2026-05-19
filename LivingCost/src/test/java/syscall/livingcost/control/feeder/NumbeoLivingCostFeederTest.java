@@ -5,9 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import syscall.livingcost.control.webScraper.NumbeoHtmlExtractor;
-import syscall.livingcost.control.webScraper.WebScraper;
-import syscall.livingcost.model.LivingCost;
+import org.syscall.livingcost.control.feeder.NumbeoLivingCostFeeder;
+import org.syscall.livingcost.control.webScraper.NumbeoHtmlExtractor;
+import org.syscall.livingcost.control.webScraper.WebScraper;
+import org.syscall.livingcost.model.LivingCost;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;

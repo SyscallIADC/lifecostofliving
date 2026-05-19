@@ -6,10 +6,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import syscall.livingcost.control.database.LivingCostStore;
-import syscall.livingcost.control.database.countryQueue.CountryQueueStore;
-import syscall.livingcost.control.feeder.LivingCostFeeder;
-import syscall.livingcost.model.LivingCost;
+import org.syscall.livingcost.control.ExtractionJob;
+import org.syscall.livingcost.control.database.LivingCostStore;
+import org.syscall.livingcost.control.database.countryQueue.CountryQueueStore;
+import org.syscall.livingcost.control.feeder.LivingCostFeeder;
+import org.syscall.livingcost.model.LivingCost;
 
 import java.util.Random;
 

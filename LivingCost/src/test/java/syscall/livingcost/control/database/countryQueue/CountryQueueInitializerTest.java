@@ -2,7 +2,8 @@ package syscall.livingcost.control.database.countryQueue;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import syscall.livingcost.control.database.DatabaseHelper;
+import org.syscall.livingcost.control.database.DatabaseHelper;
+import org.syscall.livingcost.control.database.countryQueue.CountryQueueInitializer;
 
 import java.nio.file.Path;
 import java.sql.Connection;

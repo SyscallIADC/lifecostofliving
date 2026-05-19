@@ -3,6 +3,7 @@ package syscall.livingcost.control.webScraper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.syscall.livingcost.control.webScraper.PlaywrightWebScraper;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;

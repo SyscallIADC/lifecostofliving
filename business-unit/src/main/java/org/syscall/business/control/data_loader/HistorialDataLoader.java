@@ -11,8 +11,8 @@ import java.util.stream.Stream;
 public class HistorialDataLoader {
     private static final String BASE_DIR = "eventstore";
 
-    public static void load(DatamartRepository datamart) {
-        Path startPath = Paths.get(BASE_DIR);
+    public static void load(DatamartRepository datamart, String eventStorePath) {
+        Path startPath = Paths.get(eventStorePath);
 
         if (!Files.exists(startPath)) {
             System.out.println("No se encontró la carpeta eventstore. El Datamart iniciará vacío.");

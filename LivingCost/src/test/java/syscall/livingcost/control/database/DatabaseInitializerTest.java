@@ -2,8 +2,8 @@ package syscall.livingcost.control.database;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import syscall.livingcost.control.database.DatabaseHelper;
-import syscall.livingcost.control.database.DatabaseInitializer;
+import org.syscall.livingcost.control.database.DatabaseHelper;
+import org.syscall.livingcost.control.database.DatabaseInitializer;
 
 import java.nio.file.Path;
 import java.sql.*;

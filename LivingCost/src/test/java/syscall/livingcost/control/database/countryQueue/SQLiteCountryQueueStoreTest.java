@@ -3,6 +3,7 @@ package syscall.livingcost.control.database.countryQueue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.syscall.livingcost.control.database.countryQueue.SQLiteCountryQueueStore;
 
 import java.nio.file.Path;
 

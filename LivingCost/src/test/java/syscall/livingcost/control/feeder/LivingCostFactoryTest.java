@@ -1,8 +1,9 @@
 package syscall.livingcost.control.feeder;
 
 import org.junit.jupiter.api.Test;
-import syscall.livingcost.control.webScraper.NumbeoLivingCostData;
-import syscall.livingcost.model.LivingCost;
+import org.syscall.livingcost.control.feeder.LivingCostFactory;
+import org.syscall.livingcost.control.webScraper.NumbeoLivingCostData;
+import org.syscall.livingcost.model.LivingCost;
 
 import java.time.LocalDate;
 

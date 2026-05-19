@@ -6,6 +6,8 @@ import org.syscall.business.model.MarketTrend;
 
 import java.util.List;
 
+import static java.lang.Math.abs;
+
 public class TrendAnalyzer {
     private final DatamartRepository datamart;
 
@@ -78,7 +80,7 @@ public class TrendAnalyzer {
     }
 
     private MarketTrend categorizeTrend(double percentageChange, double cv) {
-        if (cv > 15.0) return MarketTrend.VOLATILE;
+        if (abs(cv) > 12.0) return MarketTrend.VOLATILE;
         if (percentageChange > 5.0) return MarketTrend.INFLATION;
         if (percentageChange < -5.0) return MarketTrend.DEFLATION;
         return MarketTrend.STABLE;

@@ -2,6 +2,8 @@ package syscall.livingcost.control.webScraper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.syscall.livingcost.control.webScraper.NumbeoHtmlExtractor;
+import org.syscall.livingcost.control.webScraper.NumbeoLivingCostData;
 
 import java.io.IOException;
 import java.nio.file.Files;

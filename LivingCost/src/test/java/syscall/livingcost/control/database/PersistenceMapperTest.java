@@ -1,7 +1,8 @@
 package syscall.livingcost.control.database;
 
 import org.junit.jupiter.api.Test;
-import syscall.livingcost.model.LivingCost;
+import org.syscall.livingcost.control.database.PersistenceMapper;
+import org.syscall.livingcost.model.LivingCost;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

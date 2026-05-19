@@ -1,7 +1,7 @@
 package syscall.livingcost.control.webScraper;
 
 import org.junit.jupiter.api.Test;
-import syscall.livingcost.control.webScraper.NumbeoPriceParser;
+import org.syscall.livingcost.control.webScraper.NumbeoPriceParser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
