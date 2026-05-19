@@ -35,7 +35,8 @@ El proyecto implementa un flujo de datos basado en el patrón **Publisher/Subscr
 ### Arquitectura de la Aplicación (Módulo Business Unit)
 A nivel de software, el módulo principal de análisis se ha estructurado siguiendo el patrón arquitectónico **MVC (Model-View-Controller)**. Esto aísla la capa de presentación (CLI) de la lógica de negocio matemática y de las operaciones de persistencia en la base de datos (DAO).
 
-[AQUÍ INCLUIR IMAGEN DEL DIAGRAMA DE CLASES]
+<img width="3151" height="1712" alt="busines_unit_diagram" src="https://github.com/user-attachments/assets/af62d1be-5797-42f6-b18a-15ec349c2a2b" />
+
 
 ### Arquitectura de los Feeders (LivingCost y ExchangeRate)
 Cada uno de los módulos que forman parte del publisher siguiendo un modelo **Model-Controller**. Así cada uno tiene su particularización del feeder, obteniendo datos o de una API o de un WebScrapper.
