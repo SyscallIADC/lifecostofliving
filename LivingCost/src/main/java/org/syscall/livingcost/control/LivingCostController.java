@@ -1,0 +1,40 @@
+package org.syscall.livingcost.control;
+
+import org.syscall.livingcost.control.database.countryQueue.CountryQueueStore;
+import org.syscall.livingcost.control.feeder.LivingCostFeeder;
+
+import java.util.Random;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+public class LivingCostController {
+    private final LivingCostFeeder feeder;
+    private final CountryQueueStore countryQueue;
+    private final Random random;
+
+    public LivingCostController(LivingCostFeeder feeder,
+                                CountryQueueStore countryQueue, Random random) {
+        this.feeder = feeder;
+        this.countryQueue = countryQueue;
+        this.random = random;
+    }
+
+    public void run() {
+        ExtractionJob extractionJob = new ExtractionJob(feeder, countryQueue, random);
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        System.out.println("Starting LivingCost Module");
+
+        scheduler.scheduleAtFixedRate(
+                () -> {try {
+                    extractionJob.extraction();
+                } catch (Exception e) {
+                    System.out.println("Error during extraction... " + e.getMessage());
+                }
+                },
+                0,
+                15,
+                TimeUnit.MINUTES
+        );
+    }
+}
