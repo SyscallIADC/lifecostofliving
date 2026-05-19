@@ -1,7 +1,7 @@
 package org.syscall.exchangerate.control;
 
-import org.syscall.exchangerate.control.feeder.ActiveMQExchangeRatePublisher;
 import org.syscall.exchangerate.control.feeder.ExchangeRateFeeder;
+import org.syscall.exchangerate.control.publisher.ExchangeRatePublisher;
 import org.syscall.exchangerate.models.ExchangeRate;
 
 import javax.jms.JMSException;
@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 public class Controller {
 
     private final ExchangeRateFeeder feeder;
-    private final ActiveMQExchangeRatePublisher publisher;
+    private final ExchangeRatePublisher publisher;
     private final ScheduledExecutorService executor;
 
     private static final String BASE_CURRENCY = "EUR";
@@ -23,7 +23,7 @@ public class Controller {
             "KYD", "DOP", "ILS", "QAR", "ZAR"
     };
 
-    public Controller(ExchangeRateFeeder feeder, ActiveMQExchangeRatePublisher publisher) {
+    public Controller(ExchangeRateFeeder feeder, ExchangeRatePublisher publisher) {
         this.feeder = feeder;
         this.publisher = publisher;
         this.executor = Executors.newSingleThreadScheduledExecutor();

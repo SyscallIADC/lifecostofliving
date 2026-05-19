@@ -1,4 +1,4 @@
-package org.syscall.exchangerate.control.feeder;
+package org.syscall.exchangerate.control.publisher;
 
 
 import com.google.gson.Gson;
