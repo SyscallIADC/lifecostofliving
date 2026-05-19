@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 public class ActiveMQSubscriber implements Subscriber{
-    private final String brokerUrl = "tcp://localhost:61616";
+    private final String brokerUrl = "failover:(tcp://localhost:61616)?randomize=false";
     private Connection connection;
     private Session session;
     private final List<MessageConsumer> consumers = new ArrayList<>();

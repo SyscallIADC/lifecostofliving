@@ -13,7 +13,8 @@ import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
-        CountryQueueInitializer.initialize(args[0]);
+        String dbPath = args.length > 0 ? args[0] : "livingcost.db";
+        CountryQueueInitializer.initialize(dbPath);
         CountryQueueStore countryQueue = new SQLiteCountryQueueStore(args[0]);
         NumbeoHtmlExtractor extractor = new NumbeoHtmlExtractor();
         PlaywrightWebScraper scraper = new PlaywrightWebScraper();

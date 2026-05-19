@@ -11,7 +11,8 @@
     <modules>
         <module>ExchangeRate</module>
         <module>EventStoreBuilder</module>
-        <module>business-unit</module>
+        <module>BusinessUnit</module>
+        <module>LivingCost</module>
     </modules>
 
     <properties>

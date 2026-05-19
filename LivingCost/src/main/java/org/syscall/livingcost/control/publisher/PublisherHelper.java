@@ -6,7 +6,7 @@
     import javax.jms.*;
 
     public class PublisherHelper {
-        private static final String brokerUrl = "tcp://localhost:61616";
+        private static final String brokerUrl = "failover:(tcp://localhost:61616)?randomize=false";
         private static Connection connection = null;
 
         private static Connection connect() throws JMSException {

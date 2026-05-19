@@ -48,8 +48,6 @@ public class SQLiteLivingCostStore implements LivingCostStore {
             pstmt.setDouble(22, cost.apartmentBuy());
             pstmt.setDouble(23, cost.salaryMonth());
             pstmt.setDouble(24, cost.interestRate());
-            pstmt.setString(25, cost.date().toString());
-            pstmt.setString(26, cost.time().toString());
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -93,8 +91,6 @@ public class SQLiteLivingCostStore implements LivingCostStore {
                     rowMap.put("apartment_buy", result.getDouble("apartment_buy"));
                     rowMap.put("salary_month", result.getDouble("salary_month"));
                     rowMap.put("interest_rate", result.getDouble("interest_rate"));
-                    rowMap.put("date", result.getString("date"));
-                    rowMap.put("time", result.getString("time"));
 
                     livingCosts.add(PersistenceMapper.fromMap(rowMap));
                 }
@@ -141,8 +137,6 @@ public class SQLiteLivingCostStore implements LivingCostStore {
                 rowMap.put("apartment_buy", result.getDouble("apartment_buy"));
                 rowMap.put("salary_month", result.getDouble("salary_month"));
                 rowMap.put("interest_rate", result.getDouble("interest_rate"));
-                rowMap.put("date", result.getString("date"));
-                rowMap.put("time", result.getString("time"));
 
                 lastCost = PersistenceMapper.fromMap(rowMap);
             }

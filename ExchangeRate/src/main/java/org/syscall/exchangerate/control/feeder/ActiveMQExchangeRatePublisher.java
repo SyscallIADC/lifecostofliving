@@ -10,7 +10,7 @@ import javax.jms.*;
 
 public class ActiveMQExchangeRatePublisher {
 
-    private static final String BROKER_URL = "tcp://localhost:61616";
+    private static final String BROKER_URL = "failover:(tcp://localhost:61616)?randomize=false";
     private static final String TOPIC_NAME = "ExchangeRate";
     private static final String SOURCE_ID = "ExchangeRate-feeder";
 

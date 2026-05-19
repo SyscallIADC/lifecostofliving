@@ -33,9 +33,7 @@ public class PersistenceMapper {
                 extractDouble(map.get("apartment_month")),
                 extractDouble(map.get("apartment_buy")),
                 extractDouble(map.get("salary_month")),
-                extractDouble(map.get("interest_rate")),
-                LocalDate.parse((String) map.get("date")),
-                LocalTime.parse((String) map.get("time"))
+                extractDouble(map.get("interest_rate"))
         );
     }
 

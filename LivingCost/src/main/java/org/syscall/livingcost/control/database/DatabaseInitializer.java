@@ -34,9 +34,7 @@ public class DatabaseInitializer {
                 "apartment_buy REAL, " +
                 "salary_month REAL, " +
                 "interest_rate REAL, " +
-                "date TEXT NOT NULL, " +
-                "time TEXT NOT NULL, " +
-                "PRIMARY KEY (country, date, time)" +
+                "PRIMARY KEY (country)" +
                 ");";
         try (Connection connection = DatabaseHelper.getConnection(databasePath);
              Statement statement = connection.createStatement()) {
