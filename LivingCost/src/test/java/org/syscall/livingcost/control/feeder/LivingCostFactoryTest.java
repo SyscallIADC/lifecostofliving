@@ -29,7 +29,5 @@ public class LivingCostFactoryTest {
         assertEquals(3.50, result.cappuccino());
         assertEquals(4025.80, result.salaryMonth());
         assertEquals(5.2, result.interestRate());
-        assertEquals(LocalDate.now(), result.date(), "Data should be today");
-        assertNotNull(result.time(), "Hour should not be null");
     }
 }

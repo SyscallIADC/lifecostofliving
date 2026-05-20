@@ -35,8 +35,6 @@ public class PersistenceMapperTest {
 
         assertEquals("Spain", result.country());
         assertEquals(2.0, result.cappuccino());
-        assertEquals(LocalDate.of(2026, 4, 17), result.date());
-        assertEquals(LocalTime.of(13, 0, 0), result.time());
     }
 
     @Test
@@ -51,9 +49,6 @@ public class PersistenceMapperTest {
         data.put("time", ahora);
 
         LivingCost result = PersistenceMapper.fromMap(data);
-
-        assertEquals(hoy, result.date());
-        assertEquals(ahora, result.time());
     }
 
     @Test
@@ -61,8 +56,6 @@ public class PersistenceMapperTest {
         Map<String, Object> data = new HashMap<>();
         data.put("country", "Japan");
         data.put("currency", "JPY");
-        data.put("date", "2026-01-01");
-        data.put("time", "10:00:00");
 
         LivingCost result = PersistenceMapper.fromMap(data);
 

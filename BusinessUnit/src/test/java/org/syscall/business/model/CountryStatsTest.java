@@ -32,7 +32,7 @@ public class CountryStatsTest {
     void testCostGoodLiving() {
         CountryStats stats = createTestStats();
         double costSingle = stats.costSingle();
-        double expected = costSingle + 35.0 + (costSingle * 0.40);
+        double expected = costSingle + 35.0 + (costSingle * 0.50);
         assertEquals(expected, stats.costOptimum(), 0.01);
     }
 

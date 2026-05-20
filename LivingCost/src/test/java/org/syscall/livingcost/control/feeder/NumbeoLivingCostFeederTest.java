@@ -47,10 +47,7 @@ public class NumbeoLivingCostFeederTest {
 
                 () -> assertEquals(2.08, result.cappuccino(), 0.001),
                 () -> assertEquals(1.52, result.gasoline(), 0.001),
-                () -> assertEquals(1766.57, result.salaryMonth(), 0.001),
-
-                () -> assertEquals(LocalDate.now(), result.date(), "Date should be today."),
-                () -> assertNotNull(result.time(), "Hour should be not null.")
+                () -> assertEquals(1766.57, result.salaryMonth(), 0.001)
         );
     }
 }

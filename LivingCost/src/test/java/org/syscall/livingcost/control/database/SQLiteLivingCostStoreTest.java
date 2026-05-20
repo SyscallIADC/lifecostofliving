@@ -41,8 +41,7 @@ public class SQLiteLivingCostStoreTest {
         LivingCost retrievedCost = results.get(0);
         assertEquals("Spain", retrievedCost.country());
         assertEquals("EUR", retrievedCost.currency());
-        assertEquals(2.5, retrievedCost.cappuccino()); // Verificamos un precio para asegurar el mapeo
-        assertEquals(fecha, retrievedCost.date());
+        assertEquals(2.5, retrievedCost.cappuccino());
     }
 
     @Test
@@ -59,8 +58,6 @@ public class SQLiteLivingCostStoreTest {
 
         assertNotNull(lastData, "No debería devolver null si hay datos");
         assertEquals("Spain", lastData.country(), "Debería haber recuperado el registro del 18 de Abril (el más reciente)");
-        assertEquals(LocalDate.of(2026, 4, 18), lastData.date());
-        assertEquals(LocalTime.of(15, 30), lastData.time());
     }
 
     @Test
@@ -79,7 +76,6 @@ public class SQLiteLivingCostStoreTest {
                 10.0, 6.0, 15.0, 2.5, 2.0,
                 0.5, 30.0, 1.6, 25000.0, 150.0,
                 400.0, 40.0, 900.0, 1500.0, 3500.0,
-                2000.0, 3.5,
-                date, time);
+                2000.0, 3.5);
     }
 }
