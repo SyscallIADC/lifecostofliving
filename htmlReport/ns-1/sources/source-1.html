@@ -1,0 +1,187 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > ExchangeRate</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">organization.livincostfeeder.models</a>
+</div>
+
+<h1>Coverage Summary for Class: ExchangeRate (organization.livincostfeeder.models)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ExchangeRate</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/28)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package organization.livincostfeeder.models;
+&nbsp;import java.util.Map;
+&nbsp;import java.util.HashMap;
+&nbsp;
+&nbsp;
+&nbsp;public class ExchangeRate {
+&nbsp;
+&nbsp;    private String fromCurrency;
+&nbsp;    private String toCurrency;
+&nbsp;    private double exchangeRate;
+&nbsp;    private String lastRefreshed;
+&nbsp;    private String timeZone;
+&nbsp;
+<b class="nc">&nbsp;    public ExchangeRate(String s) {</b>
+&nbsp;    }
+&nbsp;
+<b class="nc">&nbsp;    public ExchangeRate(String fromCurrency, String toCurrency, double exchangeRate, String lastRefreshed, String timeZone) {</b>
+<b class="nc">&nbsp;        this.fromCurrency = fromCurrency;</b>
+<b class="nc">&nbsp;        this.toCurrency = toCurrency;</b>
+<b class="nc">&nbsp;        this.exchangeRate = exchangeRate;</b>
+<b class="nc">&nbsp;        this.lastRefreshed = lastRefreshed;</b>
+<b class="nc">&nbsp;        this.timeZone = timeZone;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    public Map&lt;String, Object&gt; toMap() {
+<b class="nc">&nbsp;        Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();</b>
+<b class="nc">&nbsp;        map.put(&quot;from-currency&quot;, fromCurrency);</b>
+<b class="nc">&nbsp;        map.put(&quot;to-currency&quot;, toCurrency);</b>
+<b class="nc">&nbsp;        map.put(&quot;exchange-rate&quot;, exchangeRate);</b>
+<b class="nc">&nbsp;        map.put(&quot;last-refreshed&quot;, lastRefreshed);</b>
+<b class="nc">&nbsp;        map.put(&quot;time-zone&quot;, timeZone);</b>
+<b class="nc">&nbsp;        return map;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static double extractDouble(Object value) {
+<b class="nc">&nbsp;        if (value instanceof Double) return (Double) value;</b>
+<b class="nc">&nbsp;        if (value instanceof Number) return ((Number) value).doubleValue();</b>
+<b class="nc">&nbsp;        return 0.0;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static ExchangeRate fromMap(Map&lt;String, Object&gt; map) {
+<b class="nc">&nbsp;        return new ExchangeRate(</b>
+<b class="nc">&nbsp;                (String) map.get(&quot;from-currency&quot;),</b>
+<b class="nc">&nbsp;                (String) map.get(&quot;to-currency&quot;),</b>
+<b class="nc">&nbsp;                extractDouble(map.get(&quot;exchange-rate&quot;)),</b>
+<b class="nc">&nbsp;                (String) map.get(&quot;last-refreshed&quot;),</b>
+<b class="nc">&nbsp;                (String) map.get(&quot;time-zone&quot;)</b>
+&nbsp;        );
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getFromCurrency() {
+<b class="nc">&nbsp;        return fromCurrency;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getToCurrency() {
+<b class="nc">&nbsp;        return toCurrency;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public double getExchangeRate() {
+<b class="nc">&nbsp;        return exchangeRate;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getLastRefreshed() {
+<b class="nc">&nbsp;        return lastRefreshed;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getTimeZone() {
+<b class="nc">&nbsp;        return timeZone;</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-04-07 09:12</div>
+</div>
+</body>
+</html>

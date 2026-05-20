@@ -1,0 +1,148 @@
+===== PAGE 1 =====
+Desarrollo de Aplicaciones para Ciencia
+de Datos
+Proyecto de la asignatura. Sprint 3:
+Explotación de datos en tiempo real y en diferido.
+Duración: 3 semanas
+Modalidad: Trabajo en equipo
+
+===== PAGE 2 =====
+Desarrollo de aplicaciones para ciencia de datos
+Grado en Ciencia e Ingeniería de Datos.
+Escuela Universitaria de Informática. Universidad de Las Palmas de Gran Canaria
+1. Objetivo
+Este sprint representa la culminación del proyecto y plantea la creación de una arquitectura
+Lambda o Kappa , en la que una unidad de negocio consume datos en tiempo real desde el
+broker y, cuando sea necesario, consulta eventos históricos desde el event store .
+Se asume el trabajo de los sprints anteriores: los feeders publican eventos en ActiveMQ y el
+módulo Event Store Builder (Sprint 2) los persiste en el event store . En este Sprint 3 se añade
+un módulo nuevo ( business-unit ) que construye y mantiene un datamart para responder a
+consultas del usuario nal.
+Se desarrollará un nuevo módulo llamado business-unit , cuyo propósito es explotar los datos
+en tiempo real o en diferido para generar valor para un usuario nal, a través de análisis,
+consultas o recomendaciones. Esta funcionalidad debe ser accesible mediante una interfaz de
+usuario, ya sea en forma de API REST, interfaz gráca (GUI) o línea de comandos (CLI). La
+arquitectura se ilustra en la Figura 1.
+Figura 1: Esquema nal de la arquitectura.
+1
+
+===== PAGE 3 =====
+Desarrollo de aplicaciones para ciencia de datos
+Grado en Ciencia e Ingeniería de Datos.
+Escuela Universitaria de Informática. Universidad de Las Palmas de Gran Canaria
+2. Requisitos del Proyecto
+2.1. Requisitos operacionales
+1. El sistema debe funcionar en local. La interfaz del usuario nal debe ser una API REST,
+una GUI o una CLI (según se dene en los requisitos funcionales).
+2. El módulo business-unit estará desarrollado en Java 21, al igual que el resto del pro-
+yecto.
+3. El entorno de desarrollo debe seguir siendo IntelliJ.
+4. El repositorio del proyecto debe reejar progreso mediante al menos 5 commits adicionales
+en este sprint.
+2.2. Requisitos funcionales
+1. Consumo en tiempo real
+business-unit debe estar suscrito a los topics necesarios del broker ActiveMQ y
+consumir los eventos a medida que se producen.
+Se debe gestionar la continuidad del consumo (reconexiones y recuperación). Se
+recomienda usar una suscripción durable cuando aplique.
+A partir de estos eventos, debe alimentar un datamart local y mantenerlo actualizado
+en todo momento.
+2. Acceso a eventos históricos
+Si se requieren datos pasados, el módulo business-unit puede acceder directamente
+al event store para leer los cheros .events almacenados (un evento por línea en
+formato JSON Lines/NDJSON).
+Debe implementar un sistema para cargar estos eventos históricos y tratarlos de for-
+ma similar a los eventos en tiempo real (por ejemplo, para inicializar/reconstruir
+el datamart al arrancar).
+3. Generación de valor para un usuario nal
+La unidad de negocio debe implementar una o más funcionalidades que respondan
+a una necesidad o caso de uso concreto: predicciones, análisis comparativos, alertas,
+recomendaciones, etc.
+Esta funcionalidad debe estar disponible a través de una interfaz de usuario:
+2
+
+===== PAGE 4 =====
+Desarrollo de aplicaciones para ciencia de datos
+Grado en Ciencia e Ingeniería de Datos.
+Escuela Universitaria de Informática. Universidad de Las Palmas de Gran Canaria
+ Una API REST (por ejemplo, usando Javalin).
+ Una GUI (por ejemplo, Swing o una interfaz web básica).
+ O una CLI (interfaz por consola) clara y funcional.
+4. Diseño libre del datamart
+El datamart puede implementarse con cualquier estructura de almacenamiento per-
+sistente o en memoria (SQLite, CSV, estructuras dinámicas en java, grafos, etc.).
+Su diseño debe estar justicado y alineado con la funcionalidad ofrecida (modelo
+de datos, índices/estructuras para consultas, y estrategia de reconstrucción si es en
+memoria).
+3. Cronograma
+3.1. Semana 1: diseño del datamart y ujo de eventos
+Objetivo : Denir la funcionalidad que aporta valor al usuario, diseñar el datamart y establecer
+el ujo de datos en tiempo real.
+Actividades :
+1. Especicar qué valor aportará la unidad de negocio al usuario nal y qué tipo de interfaz
+se va a desarrollar.
+2. Diseñar la estructura del datamart .
+3. Implementar la suscripción al broker y la ingestión continua de eventos.
+4. Registrar los eventos recibidos en el datamart .
+3.2. Semana 2: integración con el event store e implementación de la
+interfaz
+Objetivo : Integrar el acceso al event store y comenzar a construir la interfaz para el usuario
+nal.
+Actividades :
+1. Implementar el lector de eventos históricos desde archivos .events .
+3
+
+===== PAGE 5 =====
+Desarrollo de aplicaciones para ciencia de datos
+Grado en Ciencia e Ingeniería de Datos.
+Escuela Universitaria de Informática. Universidad de Las Palmas de Gran Canaria
+2. Integrar estos eventos al análisis que realiza la unidad de negocio.
+3. Desarrollar la interfaz seleccionada (REST, GUI o CLI) para acceder a los análisis.
+4. Probar consultas sobre el datamart que combinen datos actuales e históricos.
+3.3. Semana 3: demostración, ajustes nales y documentación
+Objetivo : Validar el sistema completo, documentar y presentar la funcionalidad nal.
+Actividades :
+1. Validar la funcionalidad end-to-end desde el proveedor hasta la interfaz del usuario.
+2. Refactorizar el código para mejorar su limpieza y comprensión además de asegurar la
+modularidad y eciencia. Revisen los estándares de desarrollo vistos en clase ( clean code ).
+3. Preparar una demo funcional donde se muestre:
+El ujo de eventos en tiempo real.
+El acceso a eventos históricos.
+El uso de la interfaz con consultas útiles.
+4. Redactar documentación en el README.md incluyendo:
+Objetivo de la funcionalidad de negocio.
+Arquitectura nal del sistema.
+Cómo ejecutar cada componente y probar la interfaz.
+5. Asegurarse de que todo está subido en el repositorio de GitHub y que está accesible para
+los profesores.
+4. Recursos
+1. Documentación ocial de ActiveMQ:
+Instalación y conguración: guía de inicio
+Descarga del binario: descarga
+Uso de ActiveMQ con Java: ejemplo Hello World (JMS)
+4
+
+===== PAGE 6 =====
+Desarrollo de aplicaciones para ciencia de datos
+Grado en Ciencia e Ingeniería de Datos.
+Escuela Universitaria de Informática. Universidad de Las Palmas de Gran Canaria
+2. Librerías necesarias:
+ActiveMQ Client: org.apache.activemq:activemq-client:5.15.12
+Gson para serialización JSON: com.google.code.gson:gson:2.8.9
+Jackson para serialización JSON (alternativa a Gson): com.fasterxml.jackson.core:jackson-databind
+3. Herramientas recomendadas:
+Postman/Talend Api Tester: Para probar las solicitudes a los servicios remotos.
+Consola de ActiveMQ: Para visualizar los mensajes en ActiveMQ.
+5. Consejos para el desarrollo
+Denan primero el caso de uso: ¾Qué quiere ver o hacer el usuario con estos datos? A
+partir de eso diseñen el datamart .
+Piensen en el datamart como una vista optimizada de los datos para que las consultas
+sean rápidas y relevantes.
+Manejen correctamente las excepciones en la conexión con ActiveMQ para evitar bloqueos.
+Utilicen logs para depurar: agregar System.out.println() o una librería como SLF4J
+para visualizar eventos enviados y recibidos.
+Lleven sus dudas a las sesiones prácticas: no esperen al último momento para preguntar
+sobre errores o problemas.
+No olviden la validación y la documentación nal: una solución técnicamente buena tam-
+bién debe ser comprensible y reproducible.
+5

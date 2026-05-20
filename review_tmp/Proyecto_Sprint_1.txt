@@ -1,0 +1,339 @@
+===== PAGE 1 =====
+Desarrollo de Aplicaciones para Ciencia
+de Datos
+Proyecto de la asignatura. Sprint 1:
+Captura de datos a partir de fuentes externas.
+Duración: 3 semanas
+Modalidad: Trabajo en equipo
+
+===== PAGE 2 =====
+Desarrollo de aplicaciones para ciencia de datos
+Grado en Ciencia e Ingeniería de Datos.
+Escuela Universitaria de Informática. Universidad de Las Palmas de Gran Canaria
+1. Objetivo
+Desarrollar un proyecto multimódulo en Java que consuma datos de dos fuentes externas
+(APIs y/o páginas web mediante scraping ) y los persista en una base de datos SQLite.
+El proyecto está diseñado para trabajar en sprints , y este es el primero de tres. En este sprint
+no se exige combinar las dos fuentes: cada módulo debe capturar, procesar y persistir su
+fuente de forma independiente. En las próximas etapas, expandiremos esta base inicial para
+integrar fuentes y agregar nuevas funcionalidades.
+2. Requisitos del Proyecto
+Requisitos operacionales:
+1. El programa podrá funcionar en local y mediante una interfaz de usuario en modo texto
+(si fuera necesario informar de algo).
+2. Estará programado en Java, usando la versión 21.
+3. El proyecto debe estar desarrollado en el entorno de programación IntelliJ.
+4. Deben registrarse al menos 5 commits que certiquen el progreso del desarrollo.
+Requisitos funcionales:
+1. Consumo de fuentes externas (API o scraping):
+Seleccionen dos fuentes externas con contenido dinámico , es decir, que su informa-
+ción varíe con el tiempo. Se admite el uso de APIs y también de páginas web que
+se puedan scrapear . En los anexos encontrarán un listado de opciones. Pueden
+proponer otras, pero consulten con el equipo docente para aclarar su idoneidad.
+Si optan por scraping , indiquen la(s) URL(s), y el contenido a extraer. Eviten
+fuentes que requieran autenticación o que bloqueen el acceso automatizado.
+2. Persistencia de Datos:
+Cada módulo debe almacenar los datos obtenidos de las fuentes externas en tablas
+de una base de datos SQLite.
+Los datos deben capturarse periódicamente (por ejemplo, cada hora) y ser guardados
+en la base de datos de forma incremental: sin borrar ni sobrescribir lo anterior.
+Dado que la información tiene una característica temporal, cada ejecución debe ir
+insertando la nueva información (capturas/versiones) conforme cambia con el tiempo.
+1
+
+===== PAGE 3 =====
+Desarrollo de aplicaciones para ciencia de datos
+Grado en Ciencia e Ingeniería de Datos.
+Escuela Universitaria de Informática. Universidad de Las Palmas de Gran Canaria
+La persistencia debe incluir una marca temporal de captura (por ejemplo, captured_at )
+para poder analizar la evolución de los datos.
+3. Alcance del Sprint 1:
+No es obligatorio combinar o cruzar los datos de ambas fuentes.
+Se valorará que el diseño facilite la integración en sprints posteriores (modelo de
+datos, identicadores y timestamps).
+4. Al nalizar las tres semanas, se revisará el avance del proyecto.
+3. Cronograma
+3.1. Semana 1: Planicación y Conguración
+Objetivo : Congurar el entorno y denir el diseño de la solución.
+Actividades:
+1. Toma de Decisiones . Al elegir las fuentes externas (APIs o webs para scraping), tengan
+en cuenta:
+a ) Variabilidad temporal: Que los datos varíen con el tiempo con el n de hacer una
+consulta/scraping periódicos de la información que provee la fuente.
+b ) Compatibilidad de Datos: La facilidad de integrar los datos de ambas fuentes en un
+sistema coherente en sprints posteriores. Evalúen la documentación de la API o la
+estabilidad de la estructura HTML (si hay scraping) y asegúrense de que se adapta
+a los requisitos del proyecto.
+c ) Valor Añadido: La capacidad de combinar la información para ofrecer una funciona-
+lidad única (se trabajará en sprints posteriores). En los anexos de este documento
+hay muchas alternativas. Ejemplo:
+Combinar noticias de impacto nanciero con datos de precios de criptomonedas.
+Relacionar el clima con eventos deportivos para predecir posibles retrasos.
+Analizar cómo las condiciones económicas afectan eventos locales.
+Si tienen dudas sobre sobre la propuesta de valor, pueden plantear sus ideas para recibir orien-
+tación.
+1. Conguren el proyecto en GitHub .
+2
+
+===== PAGE 4 =====
+Desarrollo de aplicaciones para ciencia de datos
+Grado en Ciencia e Ingeniería de Datos.
+Escuela Universitaria de Informática. Universidad de Las Palmas de Gran Canaria
+2. Denan la estructura del proyecto multimódulo (2 módulos principales, uno para cada
+fuente externa) y sus clases necesarias:
+Clases para consumir fuentes externas (cliente API o scraper).
+Clases para transformar/normalizar los datos extraídos (JSON/HTML) a un modelo
+interno.
+Clases para manejar la persistencia de datos.
+3. Diseñen los diagramas de clases iniciales.
+4. Establezcan el modelo de la persistencia.
+5. Prueben las fuentes seleccionadas: para APIs utilicen herramientas como Postman/Talend ;
+para scraping apoyen el análisis con el inspector del navegador (DevTools) y validen se-
+lectores desde código (por ejemplo con JSoup).
+3.2. Semana 2: Implementación
+Objetivo : Implementar el consumo de las fuentes externas (API/scraping) y la persistencia en
+SQLite.
+Actividades:
+1. Crear los módulos, uno para cada consumidor de fuente externa (API o scraper).
+2. Escriban las clases para consumir las fuentes externas y procesar las respuestas (por
+ejemplo, JSON/HTML).
+3. Creen la estructura de tablas en SQLite.
+4. Conecten ambas fuentes con la base de datos, asegurándose de que los datos se almacenen
+correctamente y no haya colisiones.
+5. Implementen la periodicidad para las consultas/scraping de las fuentes externas usando
+herramientas como ScheduledExecutorService o TimerTask, respetando límites de acceso.
+3.3. Semana 3: Pruebas y Documentación
+Objetivo : Probar la funcionalidad, corregir errores y documentar el proyecto.
+Actividades:
+3
+
+===== PAGE 5 =====
+Desarrollo de aplicaciones para ciencia de datos
+Grado en Ciencia e Ingeniería de Datos.
+Escuela Universitaria de Informática. Universidad de Las Palmas de Gran Canaria
+1. Realicen pruebas para vericar la funcionalidad completa mediante tests.
+2. Refactorizar el código para mejorar su modularidad y eciencia asegurando que cumple
+los estándares de desarrollo y diseño vistos en clase (clean code).
+4. Recursos
+1. Fuentes sugeridas (APIs y webs para scraping): Consultar anexos.
+2. Herramientas y Librerías:
+SQLite JDBC (repositorio)
+Postman/Talend Api Tester : Para probar las solicitudes a los servicios remotos.
+JSoup (scraping y parsing HTML)
+OkHttp (consumo de APIs)
+Selenium WebDriver / Playwright (opcional, si la web genera contenido con JavaS-
+cript).
+5. Consejos para el Desarrollo
+1. Trabajen en equipo y dividan las tareas de manera equitativa (por ejemplo, un módulo
+por persona).
+2. Suban avances al repositorio regularmente para evitar pérdida de trabajo.
+3. Utilicen recursos como Stack Overow, ChatGPT, la documentación ocial de las APIs
+y/o la estructura de la web (si hay scraping) para resolver dudas técnicas.
+4. Si usan scraping, revisen los términos de servicio y robots.txt del sitio, y respeten
+limitaciones de acceso (intervalos, reintentos y un User-Agent identicable).
+5. Intenten preparar las dudas para las sesiones de prácticas. Así las podrán consultar con
+el equipo docente.
+6. Se aconseja trabajar la práctica en casa, ya que requiere más horas de las que se pueden
+dedicar en el aula. En las horas de prácticas de laboratorio se abordarán las dudas que
+vayan surgiendo.
+4
+
+===== PAGE 6 =====
+Desarrollo de aplicaciones para ciencia de datos
+Grado en Ciencia e Ingeniería de Datos.
+Escuela Universitaria de Informática. Universidad de Las Palmas de Gran Canaria
+6. Anexo A: APIs disponibles y ejemplos de uso
+A continuación, se presenta una lista de servicios (APIs), junto con ejemplos de cómo combi-
+narlas para generar un valor añadido. Nota : las combinaciones se plantean como ideas para
+sprints posteriores; en el Sprint 1 no es obligatorio combinar fuentes. Para ejemplos de portales
+web que se pueden scrapear y que son interesantes de combinar con APIs, consultar el Anexo
+B.
+1. Clima y Meteorología
+OpenWeatherMap
+ URL: documentación
+ Descripción: Proporciona datos meteorológicos actuales, pronósticos y alertas.
+ Ejemplo de Uso:
+1. Con NewsAPI: Mostrar noticias relacionadas con eventos climáticos extremos como
+huracanes o incendios forestales.
+2. Con Ticketmaster API: Sugerir eventos al aire libre o en interiores según las condi-
+ciones meteorológicas.
+1. Noticias
+NewsAPI
+ URL: documentación
+ Descripción: Proporciona titulares y noticias de diversas fuentes globales.
+ Ejemplo de Uso:
+a ) Con OpenWeatherMap: Generar alertas con noticias de impacto ambiental
+relacionadas con el clima.
+b ) Con CoinGecko API: Mostrar noticias de impacto nanciero junto con pre-
+cios de criptomonedas en tiempo real.
+2. Precios de Criptomonedas y Finanzas
+CoinGecko API
+ URL: documentación
+ Descripción: Proporciona precios, estadísticas y tendencias de criptomonedas.
+ Ejemplo de Uso:
+5
+
+===== PAGE 7 =====
+Desarrollo de aplicaciones para ciencia de datos
+Grado en Ciencia e Ingeniería de Datos.
+Escuela Universitaria de Informática. Universidad de Las Palmas de Gran Canaria
+a ) Con NewsAPI: Relacionar uctuaciones en el precio de criptomonedas con
+noticias económicas recientes.
+b ) Con Alpha Vantage: Crear un tablero de seguimiento nanciero que combine
+precios de criptomonedas y acciones.
+Alpha Vantage
+ URL: documentación
+ Descripción: Proporciona datos nancieros, incluidos precios de acciones y tasas
+de cambio.
+ Ejemplo de Uso:
+a ) Con NewsAPI: Generar alertas sobre cambios en el mercado de valores ba-
+sadas en eventos geopolíticos reportados en las noticias.
+b ) Con GeoDB Cities API: Analizar cómo las tasas de cambio afectan regiones
+especícas.
+3. Transporte
+Open Transport Data API
+ URL: documentación
+ Descripción: Proporciona horarios y conexiones de transporte público.
+ Ejemplo de Uso:
+a ) Con OpenWeatherMap: Generar alertas de retrasos en el transporte debido
+a condiciones meteorológicas adversas.
+b ) Con Ticketmaster API: Sugerir transporte público adecuado para asistir a
+eventos.
+4. Eventos y Entretenimiento
+Ticketmaster API
+ URL: documentación
+ Descripción: Información sobre eventos en vivo, como conciertos, espectáculos y
+deportes.
+ Ejemplo de Uso:
+a ) Con NewsAPI: Relacionar noticias locales con eventos relevantes en la re-
+gión.
+b ) Con GeoDB Cities API: Mostrar eventos en ciudades cercanas al usuario.
+5. Datos Geográcos
+GeoDB Cities API
+6
+
+===== PAGE 8 =====
+Desarrollo de aplicaciones para ciencia de datos
+Grado en Ciencia e Ingeniería de Datos.
+Escuela Universitaria de Informática. Universidad de Las Palmas de Gran Canaria
+ URL: documentación
+ Descripción: Proporciona información sobre ciudades, poblaciones y datos geo-
+grácos.
+ Ejemplo de Uso:
+a ) Con OpenWeatherMap: Mostrar información demográca de las ciudades
+afectadas por eventos climáticos extremos.
+b ) Con Ticketmaster API: Relacionar eventos culturales con ciudades destaca-
+das.
+6. Calidad del Aire
+AirVisual API
+ URL: documentación
+ Descripción: Proporciona datos sobre calidad del aire y contaminación.
+ Ejemplo de Uso:
+a ) Con NewsAPI: Generar alertas de calidad del aire junto con noticias locales
+relacionadas con la contaminación.
+b ) Con OpenWeatherMap: Mostrar información combinada sobre clima y cali-
+dad del aire para una planicación óptima de actividades al aire libre.
+7. Deportes
+Football Data API
+ URL: documentación
+ Descripción: Proporciona resultados y estadísticas de partidos y competiciones
+de fútbol.
+ Ejemplo de Uso:
+a ) Con OpenWeatherMap: Prever retrasos o problemas en partidos al aire libre
+debido al clima.
+b ) Con NewsAPI: Mostrar noticias relacionadas con equipos o jugadores des-
+tacados en tiempo real.
+BeSoccer API
+ URL: documentación
+ Descripción: Base de datos de fútbol que incluye más de 800 competencias y
+datos en tiempo real de equipos, jugadores y competiciones.
+ Ejemplo de Uso:
+a ) Con NewsAPI: Relacionar noticias sobre transferencias de jugadores o equi-
+pos con estadísticas actualizadas de desempeño.
+7
+
+===== PAGE 9 =====
+Desarrollo de aplicaciones para ciencia de datos
+Grado en Ciencia e Ingeniería de Datos.
+Escuela Universitaria de Informática. Universidad de Las Palmas de Gran Canaria
+b ) Con GeoDB Cities API: Mostrar equipos y competiciones relacionadas con
+las principales ciudades cercanas al usuario.
+8. API de YouTube Data
+URL : documentación
+Descripción : La API de YouTube permite acceder a una gran variedad de datos re-
+lacionados con videos, canales y listas de reproducción, como búsquedas, estadísticas
+y contenido popular.
+Ejemplo de Uso:
+a ) Con OpenWeatherMap. Crear una aplicación que sugiera videos de activi-
+dades al aire libre o recetas de bebidas calientes según el clima actual. Ejemplo:
+Si el clima es lluvioso, la aplicación podría mostrar videos de recetas de café o
+actividades de manualidades.
+b ) Con Ticketmaster API. Mostrar videos promocionales de conciertos, eventos
+o artistas que tienen espectáculos cercanos al usuario. Ejemplo: Si un concierto
+está en cartelera, enlazar videos de actuaciones previas del artista.
+8
+
+===== PAGE 10 =====
+Desarrollo de aplicaciones para ciencia de datos
+Grado en Ciencia e Ingeniería de Datos.
+Escuela Universitaria de Informática. Universidad de Las Palmas de Gran Canaria
+7. Anexo B: Portales web para scraping y combinaciones
+con APIs
+Este anexo propone ejemplos de portales web que, si el sitio lo permite , se pueden usar como
+fuentes de datos mediante scraping (HTML) y que resultan interesantes para combinar con
+APIs. Antes de elegir una web, revisen sus términos de uso y robots.txt , eviten autenticación
+y prioricen páginas con HTML estable (tablas/listados) y paginación.
+7.1. Agendas culturales y eventos locales (portales institucionales)
+Ejemplos de portales (orientativos): agendas culturales de ayuntamientos/cabildos (p. ej.,
+ayuntamientos, cabildos o portales de turismo), teatros y auditorios, museos, universida-
+des (p. ej., ULPGC) y centros culturales.
+Ejemplos concretos (a modo de guía): Ayuntamiento de Las Palmas de Gran Canaria
+(agenda cultural), Cabildo de Gran Canaria (eventos), programación de teatros/auditorios
+(p. ej., Teatro Pérez Galdós, Auditorio Alfredo Kraus), ULPGC (agenda/eventos).
+Datos típicos a extraer: título, fecha/hora, ubicación, categoría, enlace a detalle.
+Posibles combinaciones con APIs:
+ OpenWeatherMap: recomendar eventos al aire libre según previsión y alertas.
+ Ticketmaster API: sugerir eventos similares o enriquecer información de artistas.
+ YouTube Data API: enlazar vídeos del artista o temática del evento.
+7.2. Movilidad, incidencias y transporte
+Ejemplos de portales (orientativos): avisos de operadores de transporte público (guaguas,
+metro/tranvía), estado del tráco y carreteras (p. ej., DGT u organismos locales), y avisos
+de puertos/aeropuertos.
+Ejemplos concretos (a modo de guía): incidencias de transporte público, paneles de avisos
+de servicio, estado del tráco/carreteras (DGT), listados de vuelos o escalas con cambios
+(p. ej., AENA, si el portal lo permite).
+Datos típicos a extraer: tipo de incidencia, zona/tramo/línea, hora de inicio/n, estado,
+enlace.
+Posibles combinaciones con APIs:
+9
+
+===== PAGE 11 =====
+Desarrollo de aplicaciones para ciencia de datos
+Grado en Ciencia e Ingeniería de Datos.
+Escuela Universitaria de Informática. Universidad de Las Palmas de Gran Canaria
+ OpenWeatherMap: correlacionar incidencias con meteorología (lluvia, viento, aler-
+tas).
+ Open Transport Data API: completar incidencias con rutas/horarios y alternativas.
+ GeoDB Cities API: normalizar ciudades/zonas afectadas y agrupar por área.
+7.3. Deportes (resultados, calendarios y clasicaciones)
+Ejemplos de portales (orientativos): federaciones deportivas, ligas locales, calendarios de
+competiciones universitarias y tablas de resultados/clasicaciones en HTML.
+Ejemplos concretos (a modo de guía): calendarios de liga/torneos, páginas de resultados
+jornada a jornada, clasicaciones actualizadas en tablas.
+Datos típicos a extraer: fecha, equipos, marcador, clasicación, sede/localización.
+Posibles combinaciones con APIs:
+ OpenWeatherMap: asociar condiciones meteorológicas a partidos al aire libre.
+ NewsAPI: añadir contexto con noticias del equipo/jugador.
+ YouTube Data API: enlazar resúmenes, ruedas de prensa o vídeos destacados.
+7.4. Otros listados públicos (rankings, tablas y boletines)
+Ejemplos de portales (orientativos): boletines ociales y tablones de anuncios públicos,
+rankings o listados de indicadores publicados en HTML con actualizaciones periódicas
+(siempre que el sitio lo permita).
+Ejemplos concretos (a modo de guía): boletines ociales (BOE/BOP), tablones de anun-
+cios institucionales, listados de indicadores publicados en web (series con fecha).
+Datos típicos a extraer: indicador/elemento, valor, fecha, fuente.
+Posibles combinaciones con APIs:
+ NewsAPI: contextualizar cambios con noticias relevantes.
+ Alpha Vantage / CoinGecko API: comparar series nancieras con indicadores extraí-
+dos por scraping.
+10
